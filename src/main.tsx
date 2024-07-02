@@ -7,14 +7,16 @@ import router from "./router.tsx";
 
 import { Provider } from "react-redux";
 import store from "./store/store.ts";
-
+import ThemeProvider from "./providers/ThemeProvider.tsx";
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
     <ReactQueryProvider>
-      <Provider store={store}>
-        <RouterProvider router={router} />
-      </Provider>
+      <ThemeProvider>
+        <Provider store={store}>
+          <RouterProvider router={router} />
+        </Provider>
+      </ThemeProvider>
     </ReactQueryProvider>
   </React.StrictMode>
 );
