@@ -7,7 +7,7 @@ interface TypographyProps {
   /**
    * The variant of the typography.
    */
-  variant: "h4" | "subtitle1" | "body1" | "caption";
+  variant: "h5" | "subtitle1" | "body1" | "caption";
   /**
    * The color of the typography.
    */
