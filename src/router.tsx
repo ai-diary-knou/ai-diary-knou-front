@@ -1,6 +1,7 @@
 import { createBrowserRouter } from "react-router-dom";
 import Layout from "./components/Layout";
-import Main from "./pages/main";
+import MainPage from "./pages/main";
+import CalendarPage from "./pages/calendar";
 
 const router = createBrowserRouter([
   {
@@ -9,11 +10,11 @@ const router = createBrowserRouter([
     children: [
       {
         path: "/",
-        element: <Main />,
+        element: <MainPage />,
       },
       {
         path: "/calendar",
-        element: <div>Calendar</div>,
+        element: <CalendarPage />,
       },
       {
         path: "/edit",
