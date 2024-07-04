@@ -3,6 +3,7 @@ import Layout from "./components/Layout";
 import MainPage from "./pages/main";
 import CalendarPage from "./pages/calendar";
 import DairyEditPage from "./pages/dairyEdit";
+import DairyDetailPage from "./pages/dairyDetail";
 
 const router = createBrowserRouter([
   {
@@ -21,6 +22,9 @@ const router = createBrowserRouter([
         path: "/edit",
         element: <DairyEditPage />,
       },
+      {
+        path: "/dairy/:id",
+        element: <DairyDetailPage />,
       },
       {
         path: "/menu",
