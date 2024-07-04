@@ -2,6 +2,7 @@ import { createBrowserRouter } from "react-router-dom";
 import Layout from "./components/Layout";
 import MainPage from "./pages/main";
 import CalendarPage from "./pages/calendar";
+import DairyEditPage from "./pages/dairyEdit";
 
 const router = createBrowserRouter([
   {
@@ -18,7 +19,8 @@ const router = createBrowserRouter([
       },
       {
         path: "/edit",
-        element: <div>Edit</div>,
+        element: <DairyEditPage />,
+      },
       },
       {
         path: "/menu",
