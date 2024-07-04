@@ -1,4 +1,5 @@
 import EmotionChart from "../components/main/EmotionChart";
+import KeywordList from "../components/main/Keyword";
 import Slider from "../components/main/Slider";
 import Typography from "../components/shared/Typography";
 
@@ -33,12 +34,13 @@ const Main = () => {
           <EmotionChart />
         </div>
       </div>
-      <div>
+      <div className="mb-[60px]">
         <div className="mb-3">
           <Typography variant="subtitle1" textAlign="left">
             나는...
           </Typography>
         </div>
+        <KeywordList />
       </div>
     </main>
   );
