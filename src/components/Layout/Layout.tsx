@@ -3,10 +3,10 @@ import Navigation from "./Navigation";
 
 const Layout = () => {
   return (
-    <div className="max-w-md mx-auto bg-[#F3F5F6] h-screen">
+    <main className="max-w-md mx-auto min-h-screen overflow-auto">
       <Outlet />
       <Navigation />
-    </div>
+    </main>
   );
 };
 

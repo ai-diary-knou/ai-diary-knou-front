@@ -15,7 +15,7 @@ const dummyItems = [
 
 const Main = () => {
   return (
-    <main className="px-8 text-center pt-[60px]">
+    <div className="px-8 py-[60px]">
       <Typography variant="h5">
         성장일기님의
         <br />
