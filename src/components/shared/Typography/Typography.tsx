@@ -11,7 +11,7 @@ interface TypographyProps {
   /**
    * The color of the typography.
    */
-  color?: "black" | "error";
+  color?: "black" | "error" | "white";
   /**
    * The text alignment of the typography.
    */
