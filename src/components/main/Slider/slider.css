@@ -1,0 +1,12 @@
+.slick-dots li.slick-active button:before {
+  opacity: 0.75;
+  color: #499f92;
+}
+
+.slick-dots li button:before {
+  font-size: 12px;
+}
+
+.slick-slider {
+  padding-bottom: 20px;
+}

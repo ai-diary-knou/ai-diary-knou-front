@@ -11,7 +11,11 @@ interface TypographyProps {
   /**
    * The color of the typography.
    */
-  color?: "black" | "error";
+  color?: "black" | "error" | "white";
+  /**
+   * The text alignment of the typography.
+   */
+  textAlign?: "center" | "left" | "right";
   /**
    * The content to be displayed within the typography.
    */
@@ -29,9 +33,17 @@ const Typography = ({
   variant,
   color = "black",
   children,
+  textAlign = "center",
 }: TypographyProps) => {
   return (
-    <MuiTypography color={color} variant={variant}>
+    <MuiTypography
+      textAlign={textAlign}
+      color={color}
+      variant={variant}
+      style={{
+        fontWeight: variant === "subtitle1" ? "bold" : "normal",
+      }}
+    >
       {children}
     </MuiTypography>
   );
