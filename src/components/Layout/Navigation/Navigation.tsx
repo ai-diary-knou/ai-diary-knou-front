@@ -9,7 +9,7 @@ const Navigation = () => {
   const location = useLocation();
 
   return (
-    <nav className="fixed max-w-md w-full bottom-0 border-t-2 border-t-black h-16">
+    <nav className="fixed max-w-md w-full bottom-0 border-t-2 border-t-black h-16 z-50 bg-[#F3F5F6]">
       <ul className="flex items-center justify-around h-full px-2">
         <li>
           <Link to="/">
