@@ -1,3 +1,4 @@
+import EmotionChart from "../components/main/EmotionChart";
 import Slider from "../components/main/Slider";
 import Typography from "../components/shared/Typography";
 
@@ -19,8 +20,25 @@ const Main = () => {
         <br />
         일기를 요약해드려요.
       </Typography>
-      <div className="mt-[60px]">
+      <div className="my-[60px]">
         <Slider items={dummyItems} />
+      </div>
+      <div>
+        <div className="mb-3">
+          <Typography variant="subtitle1" textAlign="left">
+            감정 그래프
+          </Typography>
+        </div>
+        <div className="bg-white px-4 pt-4 rounded-lg shadow-sm mb-[60px]">
+          <EmotionChart />
+        </div>
+      </div>
+      <div>
+        <div className="mb-3">
+          <Typography variant="subtitle1" textAlign="left">
+            나는...
+          </Typography>
+        </div>
       </div>
     </main>
   );
