@@ -3,6 +3,7 @@ import "dayjs/locale/ko"; // 한국어 로케일을 가져옵니다
 import customParseFormat from "dayjs/plugin/customParseFormat";
 import weekday from "dayjs/plugin/weekday";
 import Typography from "../../shared/Typography";
+import { Link } from "react-router-dom";
 
 dayjs.extend(customParseFormat);
 dayjs.extend(weekday);
@@ -36,16 +37,18 @@ const DayCard = ({ date }: DayCardProps) => {
 
   return (
     <div className="w-full p-2 bg-main_color rounded-lg">
-      <div className="mb-3">
-        <Typography variant="subtitle1" textAlign="left" color="white">
-          {dayjs(data?.date).format("YYYY년 M월 D일 dddd")}
-        </Typography>
-      </div>
-      <div className="mb-3">
-        <Typography variant="body1" textAlign="left" color="white">
-          {data?.summary}
-        </Typography>
-      </div>
+      <Link to="/dairy/ded">
+        <div className="mb-3">
+          <Typography variant="subtitle1" textAlign="left" color="white">
+            {dayjs(data?.date).format("YYYY년 M월 D일 dddd")}
+          </Typography>
+        </div>
+        <div className="mb-3">
+          <Typography variant="body1" textAlign="left" color="white">
+            {data?.summary}
+          </Typography>
+        </div>
+      </Link>
     </div>
   );
 };
