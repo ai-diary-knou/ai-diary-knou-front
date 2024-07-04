@@ -1,5 +1,6 @@
 import EmotionChart from "../components/main/EmotionChart";
 import KeywordList from "../components/main/Keyword";
+import RecommendList from "../components/main/Recommend";
 import Slider from "../components/main/Slider";
 import Typography from "../components/shared/Typography";
 
@@ -42,7 +43,15 @@ const Main = () => {
         </div>
         <KeywordList />
       </div>
-    </main>
+      <div className="pb-[60px]">
+        <div className="mb-3">
+          <Typography variant="subtitle1" textAlign="left">
+            추천 목록
+          </Typography>
+        </div>
+        <RecommendList />
+      </div>
+    </div>
   );
 };
 
