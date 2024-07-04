@@ -13,6 +13,10 @@ interface TypographyProps {
    */
   color?: "black" | "error";
   /**
+   * The text alignment of the typography.
+   */
+  textAlign?: "center" | "left" | "right";
+  /**
    * The content to be displayed within the typography.
    */
   children: React.ReactNode;
@@ -29,9 +33,17 @@ const Typography = ({
   variant,
   color = "black",
   children,
+  textAlign = "center",
 }: TypographyProps) => {
   return (
-    <MuiTypography color={color} variant={variant}>
+    <MuiTypography
+      textAlign={textAlign}
+      color={color}
+      variant={variant}
+      style={{
+        fontWeight: variant === "subtitle1" ? "bold" : "normal",
+      }}
+    >
       {children}
     </MuiTypography>
   );
