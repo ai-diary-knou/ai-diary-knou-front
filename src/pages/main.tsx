@@ -14,7 +14,7 @@ const dummyItems = [
   "오늘은 새로운 것을 배워서 기뻤어요.",
 ];
 
-const Main = () => {
+const MainPage = () => {
   return (
     <div className="px-8 py-[60px]">
       <Typography variant="h5">
@@ -55,4 +55,4 @@ const Main = () => {
   );
 };
 
-export default Main;
+export default MainPage;
