@@ -3,13 +3,13 @@ import Typography from "./Typography";
 
 describe("TypographyProps", () => {
   it("should render the Typography component with the variant h4", () => {
-    const variant = "h4";
+    const variant = "h5";
     const text = "Hello, World!";
     render(<Typography variant={variant}>{text}</Typography>);
 
     const typography = screen.getByText(text);
 
-    expect(typography.tagName).toBe("H4");
+    expect(typography.tagName).toBe("H5");
   });
 
   it("should render the Typography component with the variant subtitle1", () => {
