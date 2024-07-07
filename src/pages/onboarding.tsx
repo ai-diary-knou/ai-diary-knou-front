@@ -56,8 +56,6 @@ const OnboardingPage: React.FC = () => {
   const handleNextClick = () => {
     if (currentSlide < pages.length - 1) {
       sliderRef.current?.slickNext();
-    } else {
-      console.log("온보딩 완료!");
     }
   };
 
