@@ -57,6 +57,10 @@ interface Input {
    * The variant of the input.
    */
   variant?: 'outlined' | 'filled' | 'standard';
+  /**
+   * Whether the input should hide the text being entered.
+   */
+  secureTextEntry?: boolean;
 }
 
 /**
@@ -79,10 +83,14 @@ const Input: React.FC<Input> = ({
   size = 'medium',
   className,
   variant = 'outlined',
+  secureTextEntry = false,
 }) => {
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     onChange(event.target.value);
   };
+
+  // If secureTextEntry is true, override the type to 'password'
+  const inputType = secureTextEntry ? 'password' : type;
 
   return (
     <TextField
@@ -94,7 +102,7 @@ const Input: React.FC<Input> = ({
       required={required}
       error={error}
       helperText={helperText}
-      type={type}
+      type={inputType}
       fullWidth={fullWidth}
       size={size}
       className={className}
