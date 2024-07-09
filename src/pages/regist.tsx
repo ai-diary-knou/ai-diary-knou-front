@@ -1,11 +1,9 @@
 import React, { useState } from 'react';
-import {
-  AppBar,
-  Toolbar,
-  Typography,
-} from '@mui/material';
+
 import Input from "../components/shared/Input"
-import Button from '../components/shared/Button';
+import Button from '../components/shared/Button'
+import AppBar from '../components/shared/AppBar';
+import Title from '../components/shared/Title';
 
 const Regist: React.FC = () => {
   const [email, setEmail] = useState('');
@@ -18,19 +16,19 @@ const Regist: React.FC = () => {
 
   const handleEmailChange = (value: string) => {
     setEmail(value);
-    setIsValidEmail(validateEmail(value));
+    // 입력값이 비어있지 않을 때만 유효성 검사를 수행
+    if (value.trim() !== '') {
+      setIsValidEmail(validateEmail(value));
+    } else {
+      // 입력값이 비어있으면 유효성 상태를 true로 설정
+      setIsValidEmail(true);
+    }
   };
 
   return (
     <div className="mx-auto bg-white flex flex-col h-screen">
-      <AppBar position="static" color="transparent" elevation={0} className="pt-12 pb-6">
-        <Toolbar>
-          <Typography variant="h6" component="div" sx={{ flexGrow: 1, textAlign: 'center' }}>
-            회원가입
-          </Typography>
-        </Toolbar>
-      </AppBar>
-      
+      <AppBar/>
+      <Title title="회원가입" />      
       <div className="flex-grow flex flex-col justify-center px-6">
         <div className="mb-16">
           <Input
@@ -48,7 +46,7 @@ const Regist: React.FC = () => {
           <Button
             variant="contained"
             fullWidth
-            disabled={!isValidEmail || email === ''}
+            disabled={!isValidEmail || email.trim() === ''}
             className="bg-blue-500 hover:bg-blue-600 py-3"
           >
             다음
