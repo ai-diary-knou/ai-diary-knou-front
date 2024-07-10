@@ -1,5 +1,9 @@
-import React from 'react';
+import React, { useState } from 'react';
 import TextField from '@mui/material/TextField';
+import InputAdornment from '@mui/material/InputAdornment';
+import IconButton from '@mui/material/IconButton';
+import Visibility from '@mui/icons-material/Visibility';
+import VisibilityOff from '@mui/icons-material/VisibilityOff';
 
 /**
  * Props for the Input component.
@@ -85,12 +89,18 @@ const Input: React.FC<Input> = ({
   variant = 'outlined',
   secureTextEntry = false,
 }) => {
+  const [showPassword, setShowPassword] = useState(false);
+
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     onChange(event.target.value);
   };
 
-  // If secureTextEntry is true, override the type to 'password'
-  const inputType = secureTextEntry ? 'password' : type;
+  const handleClickShowPassword = () => {
+    setShowPassword(!showPassword);
+  };
+
+  // If secureTextEntry is true, use 'password' type, otherwise use 'text' or other specified type
+  const inputType = secureTextEntry ? (showPassword ? 'text' : 'password') : type;
 
   return (
     <TextField
@@ -107,6 +117,19 @@ const Input: React.FC<Input> = ({
       size={size}
       className={className}
       variant={variant}
+      InputProps={{
+        endAdornment: secureTextEntry ? (
+          <InputAdornment position="end">
+            <IconButton
+              aria-label="toggle password visibility"
+              onClick={handleClickShowPassword}
+              edge="end"
+            >
+              {showPassword ? <VisibilityOff /> : <Visibility />}
+            </IconButton>
+          </InputAdornment>
+        ) : null,
+      }}
     />
   );
 };
