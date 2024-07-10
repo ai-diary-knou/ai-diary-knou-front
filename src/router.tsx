@@ -1,7 +1,8 @@
 import { createBrowserRouter } from "react-router-dom";
 import Home from "./pages/home";
 import Onboarding from "./pages/onboarding";
-import Regist from "./pages/regist";
+import Email from "./pages/regist/email";
+import Verify from "./pages/regist/verify"
 
 const router = createBrowserRouter([
   {
@@ -17,8 +18,12 @@ const router = createBrowserRouter([
     element: <Onboarding/>,
   },
   {
-    path: "/regist",
-    element: <Regist />,
+    path: "/email",
+    element: <Email />,
+  },
+  {
+    path: "/verify",
+    element: <Verify />
   },
 ]);
 
