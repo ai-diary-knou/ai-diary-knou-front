@@ -44,10 +44,8 @@ const Regist: React.FC = () => {
         
         <div className="mt-auto mb-64">
           <Button
-            variant="contained"
             fullWidth
             disabled={!isValidEmail || email.trim() === ''}
-            className="bg-blue-500 hover:bg-blue-600 py-3"
           >
             다음
           </Button>
