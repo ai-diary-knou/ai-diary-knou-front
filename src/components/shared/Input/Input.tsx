@@ -84,7 +84,7 @@ const Input: React.FC<Input> = ({
   helperText,
   type = 'text',
   fullWidth = true,
-  size = 'medium',
+  size = 'small',
   className,
   variant = 'outlined',
   secureTextEntry = false,

@@ -1,8 +1,11 @@
 import { createBrowserRouter } from "react-router-dom";
 import Home from "./pages/home";
+
 import Onboarding from "./pages/onboarding";
 import Email from "./pages/regist/email";
-import Verify from "./pages/regist/verify"
+import Verify from "./pages/regist/verify";
+import Password from "./pages/regist/password";
+import Login from "./pages/regist/login";
 
 const router = createBrowserRouter([
   {
@@ -11,7 +14,7 @@ const router = createBrowserRouter([
   },
   {
     path: "/login",
-    element: <div>Login</div>,
+    element: <Login/>,
   },
   {
     path: "/onboarding",
@@ -25,6 +28,10 @@ const router = createBrowserRouter([
     path: "/verify",
     element: <Verify />
   },
+  {
+    path: "/password",
+    element: <Password />
+  }
 ]);
 
 export default router;
