@@ -1,6 +1,6 @@
 import React from 'react';
 import { AppBar as MuiAppBar, Toolbar, IconButton } from '@mui/material';
-import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
+import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
 
 const BackButton: React.FC = () => {
   const handleBack = () => {
@@ -14,7 +14,7 @@ const BackButton: React.FC = () => {
       onClick={handleBack}
       className="text-gray-800"
     >
-      <ChevronLeftIcon />
+      <ArrowBackIosNewIcon />
     </IconButton>
   );
 };
