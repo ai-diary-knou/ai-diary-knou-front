@@ -1,6 +1,6 @@
 import { http, HttpResponse } from "msw";
 
-export const USER_URL_PREFIX = "http://server.com/api/v1/users";
+export const USER_URL_PREFIX = "http://localhost:5173/api/v1/users";
 
 export const usersHandlers = [
   // 회원가입

@@ -1,10 +1,13 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useNavigate } from "react-router-dom";
-
-import Input from "../../components/shared/Input"
-import Button from '../../components/shared/Button'
+import Input from "../../components/shared/Input";
+import Button from '../../components/shared/Button';
 import AppBar from '../../components/shared/AppBar';
 import Title from '../../components/shared/Title';
+
+import axios from 'axios';
+
+import { USER_URL_PREFIX } from '../../mocks/users/handlers';
 
 const Regist: React.FC = () => {
   const navigate = useNavigate();
@@ -19,11 +22,9 @@ const Regist: React.FC = () => {
 
   const handleEmailChange = (value: string) => {
     setEmail(value);
-    // 입력값이 비어있지 않을 때만 유효성 검사를 수행
     if (value.trim() !== '') {
       setIsValidEmail(validateEmail(value));
     } else {
-      // 입력값이 비어있으면 유효성 상태를 true로 설정
       setIsValidEmail(true);
     }
   };
@@ -31,6 +32,25 @@ const Regist: React.FC = () => {
   function goToVerify(): void {
     navigate("/verify");
   }
+
+  useEffect(() => {
+    if (email.trim() !== '') {
+      axios
+        .get(USER_URL_PREFIX + "/duplicate", {
+          params: {
+            type: "email",
+            value: email,
+          },
+        })
+        .then((response) => {
+          console.log(response.status);
+          console.log(response.data);
+        })
+        .catch((error) => {
+          console.error('There was an error!', error);
+        });
+    }
+  }, [email]);
 
   return (
     <div className="mx-auto bg-white flex flex-col h-screen">

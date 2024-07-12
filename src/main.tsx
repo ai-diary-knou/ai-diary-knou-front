@@ -8,6 +8,7 @@ import router from "./router.tsx";
 import { Provider } from "react-redux";
 import store from "./store/store.ts";
 import ThemeProvider from "./providers/ThemeProvider.tsx";
+
 async function enableMocking() {
   if (process.env.NODE_ENV !== "development") {
     return;
