@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { useNavigate } from "react-router-dom";
 import Input from "../../components/shared/Input";
 import Button from '../../components/shared/Button';
@@ -29,30 +29,31 @@ const Regist: React.FC = () => {
     }
   };
 
-  function goToVerify(): void {
-    navigate("/verify");
-  }
-
-  useEffect(() => {
+  const goNext = (): void => {
+    console.log(email);
     if (email.trim() !== '') {
-      console.log(email);
 
-      axios
-        .get(USER_URL_PREFIX + "/duplicate", {
-          params: {
-            type: "email",
-            value: email,
-          },
-        })
-        .then((response) => {
-          console.log(response.data);
-          console.log(response.status);
-        })
-        .catch((error) => {
-          console.error('There was an error!', error);
-        });
+    axios
+      .get(USER_URL_PREFIX + "/duplicate", {
+        params: {
+          type: "email",
+          value: email,
+        },
+      })
+      .then((response) => {
+        // 서버응답 처리
+        console.log(response.data);
+        if(response.data.status === "SUCCESS") {
+          navigate("/verify");
+        }else{
+          console.log(response.data.message);
+        }
+      })
+      .catch((error) => {
+        console.error('There was an error!', error);
+      });
     }
-  }, [email]);
+  }
 
   return (
     <div className="mx-auto bg-white flex flex-col h-screen">
@@ -77,7 +78,7 @@ const Regist: React.FC = () => {
             fullWidth
             disabled={!isValidEmail || email.trim() === ''}
             className="bg-blue-500 hover:bg-blue-600 py-3"
-            onClick={goToVerify}
+            onClick={goNext}
           >
             다음
           </Button>

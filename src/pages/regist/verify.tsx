@@ -1,11 +1,15 @@
-import React, { useState } from 'react';
-
+import React, { useEffect, useState } from 'react';
+import { useNavigate } from "react-router-dom";
 import Input from "../../components/shared/Input"
 import Button from '../../components/shared/Button'
 import AppBar from '../../components/shared/AppBar';
 import Title from '../../components/shared/Title';
 
-const Regist: React.FC = () => {
+import axios from 'axios';
+
+import { USER_URL_PREFIX } from '../../mocks/users/handlers';
+
+const Verify: React.FC = () => {
   const [email, setEmail] = useState('');
   const [isValidEmail, setIsValidEmail] = useState(true);
 
@@ -24,6 +28,22 @@ const Regist: React.FC = () => {
       setIsValidEmail(true);
     }
   };
+
+  useEffect(() => {
+    axios
+      .get(USER_URL_PREFIX + "/email/auth-code", {
+        params: {
+          value: email,
+        },
+      })
+      .then((response) => {
+        // 서버응답 처리
+        console.log(response.data);
+      })
+      .catch((error) => {
+        console.error('There was an error!', error);
+      });
+  },[]);
 
   return (
     <div className="mx-auto bg-white flex flex-col h-screen">
@@ -57,4 +77,4 @@ const Regist: React.FC = () => {
   );
 };
 
-export default Regist;
+export default Verify;
