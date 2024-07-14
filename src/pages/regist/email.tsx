@@ -35,6 +35,8 @@ const Regist: React.FC = () => {
 
   useEffect(() => {
     if (email.trim() !== '') {
+      console.log(email);
+
       axios
         .get(USER_URL_PREFIX + "/duplicate", {
           params: {
@@ -43,8 +45,9 @@ const Regist: React.FC = () => {
           },
         })
         .then((response) => {
-          console.log(response.status);
-          console.log(response.data);
+          console.log('Response:', response);
+          console.log('Status:', response.status);
+          console.log('Data:', response.data);
         })
         .catch((error) => {
           console.error('There was an error!', error);
