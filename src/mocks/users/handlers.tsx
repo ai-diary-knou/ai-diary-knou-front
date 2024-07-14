@@ -105,8 +105,11 @@ export const usersHandlers = [
   }),
 
   // 이메일, 닉네임 중복 확인
-  http.get(USER_URL_PREFIX + "/duplicate", async ({ params }) => {
-    const { type, value } = params as { type: string; value: string };
+  http.get(USER_URL_PREFIX + "/duplicate", async ({ request }) => {
+    const url = new URL(request.url);
+
+    const type = url.searchParams.get("type");
+    const value = url.searchParams.get("value");
 
     if (type === "email" && value === "duplicate@gmail.com") {
       return HttpResponse.json({
@@ -135,12 +138,10 @@ export const usersHandlers = [
       });
     }
 
-    if (type === "email" && value === "test@gmail.com") {
-      return HttpResponse.json({
-        status: "SUCCESS",
-        data: null,
-      });
-    }
+    return HttpResponse.json({
+      status: "SUCCESS",
+      data: null,
+    });
   }),
 
   // 비밀번호 변경

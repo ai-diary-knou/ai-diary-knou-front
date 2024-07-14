@@ -45,9 +45,8 @@ const Regist: React.FC = () => {
           },
         })
         .then((response) => {
-          console.log('Response:', response);
-          console.log('Status:', response.status);
-          console.log('Data:', response.data);
+          console.log(response.data);
+          console.log(response.status);
         })
         .catch((error) => {
           console.error('There was an error!', error);
