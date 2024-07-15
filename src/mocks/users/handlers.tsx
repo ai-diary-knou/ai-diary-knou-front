@@ -49,6 +49,12 @@ export const usersHandlers = [
         status: "SUCCESS",
         data: null,
       });
+    }else{
+      return HttpResponse.json({
+        status: "FAIL",
+        code: "INVALID_PARAMETER",
+        message: "Invalid Parameter. email or password mismatch.",
+      });
     }
   }),
 

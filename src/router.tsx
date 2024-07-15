@@ -6,6 +6,7 @@ import Email from "./pages/regist/email";
 import Verify from "./pages/regist/verify";
 import Password from "./pages/regist/password";
 import Login from "./pages/regist/login";
+import CompleteRegist from "./pages/completeRegist";
 
 const router = createBrowserRouter([
   {
@@ -31,7 +32,11 @@ const router = createBrowserRouter([
   {
     path: "/password",
     element: <Password />
-  }
+  },
+  {
+    path: "/completeRegist",
+    element: <CompleteRegist />
+  },
 ]);
 
 export default router;

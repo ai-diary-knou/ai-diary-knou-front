@@ -1,12 +1,22 @@
 import React, { useState, useEffect } from 'react';
+
+import { useNavigate } from "react-router-dom";
+
 import Input from "../../components/shared/Input"
 import Button from '../../components/shared/Button'
 import AppBar from '../../components/shared/AppBar';
 import Title from '../../components/shared/Title';
 
+import axios from 'axios';
+
+import { USER_URL_PREFIX } from '../../mocks/users/handlers';
+
 const Password: React.FC = () => {
-  const [password1, setPassword1] = useState('');
-  const [password2, setPassword2] = useState('');
+  const navigate = useNavigate();
+
+  const [email] = useState('');
+  const [password, setPassword] = useState('');
+  const [rePassword, setrePassword] = useState('');
   const [isValidPassword, setIsValidPassword] = useState(false);
   const [passwordsMatch, setPasswordsMatch] = useState(true);
 
@@ -17,17 +27,35 @@ const Password: React.FC = () => {
   };
 
   useEffect(() => {
-    setIsValidPassword(validatePassword(password1));
-    setPasswordsMatch(password1 === password2);
-  }, [password1, password2]);
+    setIsValidPassword(validatePassword(password));
+    setPasswordsMatch(password === rePassword);
+  }, [password, rePassword]);
 
   const handlePasswordChange1 = (value: string) => {
-    setPassword1(value);
+    setPassword(value);
   };
 
   const handlePasswordChange2 = (value: string) => {
-    setPassword2(value);
+    setrePassword(value);
   };
+
+  const regist = (): void => {
+    console.log("checkVerifyCode");
+    axios
+      .post(USER_URL_PREFIX, {
+          email: email,
+          passowrd: password,
+          rePassword: rePassword,
+      })
+      .then((response) => {
+        // 서버응답 처리
+        console.log(response.status);
+        navigate("/completeRegist");
+      })
+      .catch((error) => {
+        console.error('There was an error!', error);
+      })
+  }
 
   return (
     <div className="mx-auto bg-white flex flex-col h-screen">
@@ -39,10 +67,10 @@ const Password: React.FC = () => {
             fullWidth
             label="비밀번호"
             variant="outlined"
-            value={password1}
+            value={password}
             onChange={handlePasswordChange1}
-            error={!isValidPassword && password1 !== ''}
-            helperText={!isValidPassword && password1 !== '' ? "비밀번호는 8-20자의 대소문자, 숫자, 특수문자를 포함해야 합니다." : ""}
+            error={!isValidPassword && password !== ''}
+            helperText={!isValidPassword && password !== '' ? "비밀번호는 8-20자의 대소문자, 숫자, 특수문자를 포함해야 합니다." : ""}
             secureTextEntry
           />
         </div>
@@ -51,10 +79,10 @@ const Password: React.FC = () => {
             fullWidth
             label="비밀번호 확인"
             variant="outlined"
-            value={password2}
+            value={rePassword}
             onChange={handlePasswordChange2}
-            error={!passwordsMatch && password2 !== ''}
-            helperText={!passwordsMatch && password2 !== '' ? "비밀번호가 일치하지 않습니다." : ""}
+            error={!passwordsMatch && rePassword !== ''}
+            helperText={!passwordsMatch && rePassword !== '' ? "비밀번호가 일치하지 않습니다." : ""}
             secureTextEntry
           />
         </div>
@@ -62,7 +90,8 @@ const Password: React.FC = () => {
           <Button
             variant="contained"
             fullWidth
-            disabled={!isValidPassword || !passwordsMatch || password1.trim() === '' || password2.trim() === ''}
+            onClick={regist}
+            disabled={!isValidPassword || !passwordsMatch || password.trim() === '' || rePassword.trim() === ''}
             className="bg-blue-500 hover:bg-blue-600 py-3"
           >
             다음

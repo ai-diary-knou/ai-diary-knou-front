@@ -29,6 +29,22 @@ const Regist: React.FC = () => {
     }
   };
 
+  const sendVerifyCode = (): void => {
+    console.log("sendVerifyCode");
+    axios
+      .post(USER_URL_PREFIX + "/email/auth-code", {
+          email: email,
+      })
+      .then((response) => {
+        // 서버응답 처리
+        console.log(response.status);
+      })
+      .catch((error) => {
+        console.error('There was an error!', error);
+      })
+  }
+  
+
   const goNext = (): void => {
     console.log(email);
     if (email.trim() !== '') {
@@ -44,6 +60,7 @@ const Regist: React.FC = () => {
         // 서버응답 처리
         console.log(response.data);
         if(response.data.status === "SUCCESS") {
+          sendVerifyCode();
           navigate("/verify");
         }else{
           console.log(response.data.message);
