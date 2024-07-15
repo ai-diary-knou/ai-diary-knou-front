@@ -49,13 +49,17 @@ const midlinePlugin = {
   },
 };
 
-const EmotionChart = () => {
+interface EmotionChartProps {
+  emotionData: number[];
+}
+
+const EmotionChart = ({ emotionData }: EmotionChartProps) => {
   const data = {
     labels: ["", "", "", "", "", "", ""],
     datasets: [
       {
         label: "My First dataset",
-        data: [4, 5, 7, 6, 8, 10, 5],
+        data: emotionData,
         fill: false,
         backgroundColor: "rgb(75, 192, 192)",
         borderColor: "rgba(75, 192, 192)",
