@@ -9,29 +9,18 @@ dayjs.extend(customParseFormat);
 dayjs.extend(weekday);
 dayjs.locale("ko"); // 한국어 로케일을 설정합니다
 
+type DiaryReport = {
+  diaryId: number;
+  entryDate: string;
+  literarySummary: string;
+};
+
 interface DayCardProps {
-  date: string;
+  diaryReport?: DiaryReport;
 }
 
-const dummyData = [
-  {
-    date: "2024-07-01",
-    summary: "오늘은 행복한 날이었어요",
-  },
-  {
-    date: "2024-07-02",
-    summary: "오늘은 힘들었어요",
-  },
-  {
-    date: "2024-07-03",
-    summary: "오늘은 행복한 날이었어요",
-  },
-];
-
-const DayCard = ({ date }: DayCardProps) => {
-  const data = dummyData.find((item) => item.date === date);
-
-  if (date === "" || data === undefined) {
+const DayCard = ({ diaryReport }: DayCardProps) => {
+  if (diaryReport === undefined) {
     return <></>;
   }
 
@@ -40,12 +29,12 @@ const DayCard = ({ date }: DayCardProps) => {
       <Link to="/dairy/ded">
         <div className="mb-3">
           <Typography variant="subtitle1" textAlign="left" color="white">
-            {dayjs(data?.date).format("YYYY년 M월 D일 dddd")}
+            {dayjs(diaryReport.entryDate).format("YYYY년 M월 D일 dddd")}
           </Typography>
         </div>
         <div className="mb-3">
           <Typography variant="body1" textAlign="left" color="white">
-            {data?.summary}
+            {diaryReport.literarySummary}
           </Typography>
         </div>
       </Link>
