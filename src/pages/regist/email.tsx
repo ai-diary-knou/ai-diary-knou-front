@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from "react-router-dom";
+import { useDispatch } from 'react-redux'
+
 import Input from "../../components/shared/Input";
 import Button from '../../components/shared/Button';
 import AppBar from '../../components/shared/AppBar';
@@ -8,12 +10,15 @@ import Title from '../../components/shared/Title';
 import axios from 'axios';
 
 import { USER_URL_PREFIX } from '../../mocks/users/handlers';
+import { AppDispatch, setEmail } from '../../store/store';
 
 const Regist: React.FC = () => {
   const navigate = useNavigate();
   
-  const [email, setEmail] = useState('');
+  const [email, set_Email] = useState('');
   const [isValidEmail, setIsValidEmail] = useState(true);
+
+  const dispatch = useDispatch<AppDispatch>();
 
   const validateEmail = (email: string) => {
     const re = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
@@ -21,7 +26,7 @@ const Regist: React.FC = () => {
   };
 
   const handleEmailChange = (value: string) => {
-    setEmail(value);
+    set_Email(value);
     if (value.trim() !== '') {
       setIsValidEmail(validateEmail(value));
     } else {
@@ -60,6 +65,7 @@ const Regist: React.FC = () => {
         // 서버응답 처리
         console.log(response.data);
         if(response.data.status === "SUCCESS") {
+          dispatch(setEmail(email));
           sendVerifyCode();
           navigate("/verify");
         }else{

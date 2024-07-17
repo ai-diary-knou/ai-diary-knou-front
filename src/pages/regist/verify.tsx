@@ -1,6 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from "react-router-dom";
-import { TextField, InputAdornment, IconButton } from '@mui/material';
+
+import { useSelector } from 'react-redux'
+
+import { TextField, InputAdornment } from '@mui/material';
 import Button from '../../components/shared/Button';
 import AppBar from '../../components/shared/AppBar';
 import Title from '../../components/shared/Title';
@@ -8,6 +11,7 @@ import Title from '../../components/shared/Title';
 import axios from 'axios';
 
 import { USER_URL_PREFIX } from '../../mocks/users/handlers';
+import { RootState } from '../../store/store';
 
 const Verify: React.FC = () => {
   const navigate = useNavigate();
@@ -18,16 +22,18 @@ const Verify: React.FC = () => {
   const [timer, setTimer] = useState(5);
   const [isExpired, setIsExpired] = useState(false);
 
+  const selector = useSelector((state: RootState) => state);
+
   useEffect(() => {
     if (timer > 0 && !isExpired) {
       const interval = setInterval(() => {
         setTimer(prevTimer => prevTimer - 1);
       }, 1000);
-
       return () => clearInterval(interval);
     } else if (timer === 0) {
       setIsExpired(true);
     }
+    console.log(selector.user.email);
   }, [timer, isExpired]);
 
   const validateCode = (code: string) => {
@@ -80,6 +86,7 @@ const Verify: React.FC = () => {
             value={code}
             onChange={handleCodeChange}
             error={!isValidCode}
+            size = 'small'
             helperText={
               !isValidCode 
                 ? "인증번호를 확인해주세요." 

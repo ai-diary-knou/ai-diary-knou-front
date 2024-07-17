@@ -1,6 +1,9 @@
-import { createBrowserRouter } from "react-router-dom";
-import Home from "./pages/home";
+// router.tsx
 
+import { createBrowserRouter, Navigate } from "react-router-dom";
+import Cookies from 'js-cookie';
+
+// 컴포넌트 임포트
 import Onboarding from "./pages/onboarding";
 import Email from "./pages/regist/email";
 import Verify from "./pages/regist/verify";
@@ -8,34 +11,56 @@ import Password from "./pages/regist/password";
 import Login from "./pages/regist/login";
 import CompleteRegist from "./pages/completeRegist";
 
+// 토큰 확인
+const isAuthenticated = (): boolean => {
+  const token = Cookies.get('token');
+  return !!token;
+};
+
+// 공개 페이지
+const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
+  if (!isAuthenticated()) {
+    return <Navigate to="/login" replace />;
+  }
+  return children;
+};
+
+// 비공개 페이지
+const PublicRoute = ({ children }: { children: React.ReactNode }) => {
+  if (isAuthenticated()) {
+    return <Navigate to="/" replace />;
+  }
+  return children;
+};
+
 const router = createBrowserRouter([
   {
     path: "/",
-    element: <Home />,
+    element: <ProtectedRoute><div>home!</div></ProtectedRoute>,
   },
   {
     path: "/login",
-    element: <Login/>,
+    element: <PublicRoute><Login /></PublicRoute>,
   },
   {
     path: "/onboarding",
-    element: <Onboarding/>,
+    element: <ProtectedRoute><Onboarding /></ProtectedRoute>,
   },
   {
     path: "/email",
-    element: <Email />,
+    element: <PublicRoute><Email /></PublicRoute>,
   },
   {
     path: "/verify",
-    element: <Verify />
+    element: <PublicRoute><Verify /></PublicRoute>,
   },
   {
     path: "/password",
-    element: <Password />
+    element: <PublicRoute><Password /></PublicRoute>,
   },
   {
     path: "/completeRegist",
-    element: <CompleteRegist />
+    element: <PublicRoute><CompleteRegist /></PublicRoute>,
   },
 ]);
 
