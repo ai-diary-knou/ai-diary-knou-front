@@ -14,7 +14,7 @@ import Nickname from "./pages/regist/nickname";
 
 // 토큰 확인
 const isAuthenticated = (): boolean => {
-  const token = Cookies.get('token');
+  const token = Cookies.get('accessToken');
   return !!token;
 };
 
