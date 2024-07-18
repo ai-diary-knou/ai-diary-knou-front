@@ -47,7 +47,7 @@ export const usersHandlers = [
     if (email === "test@gmail.com" && password === "Aa!123456") {
       return HttpResponse.json({
         status: "SUCCESS",
-        data: null,
+        token: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c",
       });
     }else{
       return HttpResponse.json({
@@ -72,10 +72,10 @@ export const usersHandlers = [
       });
     }
 
-    if (email === "test@gmail.com") {
+    if (email === "1229juwon67@gmail.com") {
       return HttpResponse.json({
         status: "SUCCESS",
-        data: null,
+        data: "A!12345678",
       });
     }
   }),

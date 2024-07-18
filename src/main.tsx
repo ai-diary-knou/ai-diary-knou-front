@@ -1,13 +1,13 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
 import "./index.css";
-import ReactQueryProvider from "./providers/ReactQueryProvider.tsx";
-import { RouterProvider } from "react-router-dom";
+
 import router from "./router.tsx";
 
-import { Provider } from "react-redux";
-import store from "./store/store.ts";
+import { RouterProvider } from "react-router-dom";
+import ReactQueryProvider from "./providers/ReactQueryProvider.tsx";
 import ThemeProvider from "./providers/ThemeProvider.tsx";
+import ReduxProvider from "./providers/ReduxProvider.tsx";
 
 async function enableMocking() {
   if (process.env.NODE_ENV !== "development") {
@@ -25,11 +25,11 @@ enableMocking().then(() => {
   ReactDOM.createRoot(document.getElementById("root")!).render(
     <React.StrictMode>
       <ReactQueryProvider>
-      <ThemeProvider>
-          <Provider store={store}>
+        <ThemeProvider>
+          <ReduxProvider>
             <RouterProvider router={router} />
-          </Provider>
-      </ThemeProvider>
+          </ReduxProvider>
+        </ThemeProvider>
       </ReactQueryProvider>
     </React.StrictMode>
   );

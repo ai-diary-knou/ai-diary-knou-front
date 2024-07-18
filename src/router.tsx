@@ -10,6 +10,7 @@ import Verify from "./pages/regist/verify";
 import Password from "./pages/regist/password";
 import Login from "./pages/regist/login";
 import CompleteRegist from "./pages/completeRegist";
+import Nickname from "./pages/regist/nickname";
 
 // 토큰 확인
 const isAuthenticated = (): boolean => {
@@ -62,6 +63,10 @@ const router = createBrowserRouter([
     path: "/completeRegist",
     element: <PublicRoute><CompleteRegist /></PublicRoute>,
   },
+  {
+    path: "/nickname",
+    element: <PublicRoute><Nickname /></PublicRoute>,
+  }
 ]);
 
 export default router;

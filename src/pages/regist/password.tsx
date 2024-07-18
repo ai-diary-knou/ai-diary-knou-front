@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 
 import { useNavigate } from "react-router-dom";
+import { useSelector } from 'react-redux'
 
 import Input from "../../components/shared/Input"
 import Button from '../../components/shared/Button'
@@ -11,10 +12,13 @@ import axios from 'axios';
 
 import { USER_URL_PREFIX } from '../../mocks/users/handlers';
 
+import { RootState } from '../../store/store';
+
 const Password: React.FC = () => {
   const navigate = useNavigate();
 
-  const [email] = useState('');
+  const email = useSelector((state: RootState) => state.user.email);
+  const nickname = useSelector((state: RootState) => state.user.nickname);
   const [password, setPassword] = useState('');
   const [rePassword, setrePassword] = useState('');
   const [isValidPassword, setIsValidPassword] = useState(false);
@@ -40,16 +44,20 @@ const Password: React.FC = () => {
   };
 
   const regist = (): void => {
-    console.log("checkVerifyCode");
+    console.log("regist");
     axios
       .post(USER_URL_PREFIX, {
           email: email,
+          nickname: nickname,
           passowrd: password,
           rePassword: rePassword,
       })
       .then((response) => {
         // 서버응답 처리
         console.log(response.status);
+
+
+        localStorage.removeItem('persist:root');
         navigate("/completeRegist");
       })
       .catch((error) => {

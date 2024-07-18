@@ -19,7 +19,7 @@ const Verify: React.FC = () => {
   const [code, setCode] = useState('');
   const [email] = useState('');
   const [isValidCode, setIsValidCode] = useState(true);
-  const [timer, setTimer] = useState(5);
+  const [timer, setTimer] = useState(180);
   const [isExpired, setIsExpired] = useState(false);
 
   const selector = useSelector((state: RootState) => state);
@@ -60,7 +60,7 @@ const Verify: React.FC = () => {
       })
       .then((response) => {
         console.log(response.status);
-        navigate("/password");
+        navigate("/nickname");
       })
       .catch((error) => {
         console.error('There was an error!', error);

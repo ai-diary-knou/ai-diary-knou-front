@@ -35,14 +35,14 @@ const Regist: React.FC = () => {
   };
 
   const sendVerifyCode = (): void => {
-    console.log("sendVerifyCode");
+    console.log(email);
     axios
       .post(USER_URL_PREFIX + "/email/auth-code", {
           email: email,
       })
       .then((response) => {
         // 서버응답 처리
-        console.log(response.status);
+        console.log("sendVerifyCode: " + response.status);
       })
       .catch((error) => {
         console.error('There was an error!', error);

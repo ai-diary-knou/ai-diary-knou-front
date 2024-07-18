@@ -10,6 +10,7 @@ import Title from '../../components/shared/Title';
 import axios from 'axios';
 
 import { USER_URL_PREFIX } from '../../mocks/users/handlers';
+import { setCookie } from '../../common/cookie';
 
 const Login: React.FC = () => {
   //const navigate = useNavigate();
@@ -36,11 +37,19 @@ const Login: React.FC = () => {
     axios
       .post(USER_URL_PREFIX + "/login", {
           email: email,
-          passowrd: password,
+          password: password,
       })
-      .then((response) => {
+      .then(async (response) => {
         // 서버응답 처리
         console.log(response.status);
+        console.log(response.data);
+
+        if (response.data.token) {
+          setCookie('accessToken', response.data.token);
+          // navigate('/home');
+        } else {
+          console.error('Login successful but no token received');
+        }
       })
       .catch((error) => {
         console.error('There was an error!', error);
