@@ -9,8 +9,10 @@ import Email from "./pages/regist/email";
 import Verify from "./pages/regist/verify";
 import Password from "./pages/regist/password";
 import Login from "./pages/regist/login";
-import CompleteRegist from "./pages/completeRegist";
+import CompleteRegist from "./pages/regist/completeRegist";
 import Nickname from "./pages/regist/nickname";
+
+import Regist from "./pages/regist";
 
 // 토큰 확인
 const isAuthenticated = (): boolean => {
@@ -20,17 +22,19 @@ const isAuthenticated = (): boolean => {
 
 // 공개 페이지
 const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
+  /*
   if (!isAuthenticated()) {
     return <Navigate to="/login" replace />;
-  }
+  }*/
   return children;
 };
 
 // 비공개 페이지
 const PublicRoute = ({ children }: { children: React.ReactNode }) => {
+  /*
   if (isAuthenticated()) {
     return <Navigate to="/" replace />;
-  }
+  }*/
   return children;
 };
 
@@ -66,6 +70,10 @@ const router = createBrowserRouter([
   {
     path: "/nickname",
     element: <PublicRoute><Nickname /></PublicRoute>,
+  },
+  {
+    path: "/regist",
+    element: <PublicRoute><Regist /></PublicRoute>,
   }
 ]);
 

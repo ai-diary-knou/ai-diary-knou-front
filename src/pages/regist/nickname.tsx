@@ -3,9 +3,6 @@ import { useNavigate } from "react-router-dom";
 import { useDispatch } from 'react-redux'
 
 import Input from "../../components/shared/Input";
-import Button from '../../components/shared/Button';
-import AppBar from '../../components/shared/AppBar';
-import Title from '../../components/shared/Title';
 
 import axios from 'axios';
 
@@ -61,34 +58,16 @@ const Regist: React.FC = () => {
   }
 
   return (
-    <div className="mx-auto bg-white flex flex-col h-screen">
-      <AppBar/>
-      <Title title="회원가입" />      
-      <div className="flex-grow flex flex-col justify-center px-6">
-        <div className="mb-16">
-          <Input
-            fullWidth
-            label="닉네임"
-            variant="outlined"
-            value={nickname}
-            onChange={handleNicknameChange}
-            error={!isValidNickname}
-            helperText={!isValidNickname ? "올바른 닉네임 형식이 아닙니다." : "사용하실 닉네임을 입력해주세요."}
-          />
-        </div>
-        
-        <div className="mt-auto mb-64">
-          <Button
-            variant="contained"
-            fullWidth
-            disabled={!isValidNickname || nickname.trim() === ''}
-            className="bg-blue-500 hover:bg-blue-600 py-3"
-            onClick={goNext}
-          >
-            다음
-          </Button>
-        </div>
-      </div>
+    <div className="mb-16">
+      <Input
+        fullWidth
+        label="닉네임"
+        variant="outlined"
+        value={nickname}
+        onChange={handleNicknameChange}
+        error={!isValidNickname}
+        helperText={!isValidNickname ? "올바른 닉네임 형식이 아닙니다." : "사용하실 닉네임을 입력해주세요."}
+      />
     </div>
   );
 };

@@ -1,61 +1,68 @@
-// store.ts
-import { configureStore, createSlice, PayloadAction } from '@reduxjs/toolkit';
-import storage from 'redux-persist/lib/storage';
-import { persistReducer, persistStore, FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER } from 'redux-persist';
+import { configureStore, createSlice } from "@reduxjs/toolkit";
+import type { PayloadAction } from "@reduxjs/toolkit";
 
 interface UserState {
   email: string;
   nickname: string;
+  code: string;
   key: string;
 }
 
 const initialState: UserState = {
-  email: '',
-  nickname: '',
-  key: '',
+  email: "",
+  nickname: "",
+  code: "",
+  key: "",
 };
 
 const userSlice = createSlice({
-  name: 'user',
+  name: "user",
   initialState,
   reducers: {
-    setEmail: (state, action: PayloadAction<string>) => {
+    setEmail(state, action: PayloadAction<string>) {
       state.email = action.payload;
+      //localStorage.setItem('email', action.payload);
     },
-    setNickname: (state, action: PayloadAction<string>) => {
+    setNickname(state, action: PayloadAction<string>) {
       state.nickname = action.payload;
     },
-    setKey: (state, action: PayloadAction<string>) => {
+    setCode(state, action: PayloadAction<string>) {
+      state.code = action.payload;
+    },
+    setKey(state, action: PayloadAction<string>) {
       state.key = action.payload;
     },
-    clearUserData: () => {
-      // state를 초기 상태로 리셋
-      return initialState;
+    setUser(state, action: PayloadAction<UserState>) {
+      state.email = action.payload.email;
+      state.nickname = action.payload.nickname;
+      state.code = action.payload.code;
+      state.key = action.payload.key;
+    },
+    clearUser(state) {
+      state.email = "";
+      state.nickname = "";
+      state.code = "";
+      state.key = "";
     },
   },
 });
 
-const persistConfig = {
-  key: 'root',
-  storage,
-};
-
-const persistedReducer = persistReducer(persistConfig, userSlice.reducer);
-
-export const store = configureStore({
+const store = configureStore({
   reducer: {
-    user: persistedReducer,
+    user: userSlice.reducer,
   },
-  middleware: (getDefaultMiddleware) =>
-    getDefaultMiddleware({
-      serializableCheck: {
-        ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER],
-      },
-    }),
 });
 
-export const persistor = persistStore(store);
-
-export const { setEmail, setNickname, setKey, clearUserData } = userSlice.actions;
+// store의 타입 미리 export 해두기
 export type RootState = ReturnType<typeof store.getState>;
 export type AppDispatch = typeof store.dispatch;
+
+export const {
+  setEmail,
+  setNickname,
+  setCode,
+  setKey,
+  setUser,
+  clearUser,
+} = userSlice.actions;
+export default store;

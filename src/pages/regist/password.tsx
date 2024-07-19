@@ -4,9 +4,6 @@ import { useNavigate } from "react-router-dom";
 import { useSelector } from 'react-redux'
 
 import Input from "../../components/shared/Input"
-import Button from '../../components/shared/Button'
-import AppBar from '../../components/shared/AppBar';
-import Title from '../../components/shared/Title';
 
 import axios from 'axios';
 
@@ -66,47 +63,32 @@ const Password: React.FC = () => {
   }
 
   return (
-    <div className="mx-auto bg-white flex flex-col h-screen">
-      <AppBar/>
-      <Title title="회원가입" />
-      <div className="flex-grow flex flex-col justify-center px-6">
-        <div className="mb-4">
-          <Input
-            fullWidth
-            label="비밀번호"
-            variant="outlined"
-            value={password}
-            onChange={handlePasswordChange1}
-            error={!isValidPassword && password !== ''}
-            helperText={!isValidPassword && password !== '' ? "비밀번호는 8-20자의 대소문자, 숫자, 특수문자를 포함해야 합니다." : ""}
-            secureTextEntry
-          />
-        </div>
-        <div className="mb-4">
-          <Input
-            fullWidth
-            label="비밀번호 확인"
-            variant="outlined"
-            value={rePassword}
-            onChange={handlePasswordChange2}
-            error={!passwordsMatch && rePassword !== ''}
-            helperText={!passwordsMatch && rePassword !== '' ? "비밀번호가 일치하지 않습니다." : ""}
-            secureTextEntry
-          />
-        </div>
-        <div className="mt-auto mb-64">
-          <Button
-            variant="contained"
-            fullWidth
-            onClick={regist}
-            disabled={!isValidPassword || !passwordsMatch || password.trim() === '' || rePassword.trim() === ''}
-            className="bg-blue-500 hover:bg-blue-600 py-3"
-          >
-            다음
-          </Button>
-        </div>
+    <>
+      <div className="mb-4">
+        <Input
+          fullWidth
+          label="비밀번호"
+          variant="outlined"
+          value={password}
+          onChange={handlePasswordChange1}
+          error={!isValidPassword && password !== ''}
+          helperText={!isValidPassword && password !== '' ? "비밀번호는 8-20자의 대소문자, 숫자, 특수문자를 포함해야 합니다." : ""}
+          secureTextEntry
+        />
       </div>
-    </div>
+      <div className="mb-4">
+        <Input
+          fullWidth
+          label="비밀번호 확인"
+          variant="outlined"
+          value={rePassword}
+          onChange={handlePasswordChange2}
+          error={!passwordsMatch && rePassword !== ''}
+          helperText={!passwordsMatch && rePassword !== '' ? "비밀번호가 일치하지 않습니다." : ""}
+          secureTextEntry
+        />
+      </div>
+    </>
   );
 };
 

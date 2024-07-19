@@ -1,53 +1,150 @@
-import React, { useState } from 'react';
+import React, { useState, useCallback } from 'react';
+import { useNavigate } from "react-router-dom";
 
-import Input from "../components/shared/Input"
-import Button from '../components/shared/Button'
 import AppBar from '../components/shared/AppBar';
 import Title from '../components/shared/Title';
+import Button from '../components/shared/Button';
+
+import Email from './regist/email';
+import Verify from './regist/verify';
+import Nickname from './regist/nickname';
+import Password from './regist/password';
+import CompleteRegist from './regist/completeRegist';
+
+import { useSelector, TypedUseSelectorHook } from 'react-redux'
+import { RootState } from '../store/store';
+
+import axios from 'axios';
+import { USER_URL_PREFIX } from '../mocks/users/handlers';
+
+
+const useTypedSelector: TypedUseSelectorHook<RootState> = useSelector;
+
+const steps = ['email', 'verify', 'nickname', 'password', 'completeRegist'] as const;
+type Step = typeof steps[number];
+
+const stepComponents: Record<Step, React.FC> = {
+  email: Email,
+  verify: Verify,
+  nickname: Nickname,
+  password: Password,
+  completeRegist: CompleteRegist,
+};
 
 const Regist: React.FC = () => {
-  const [email, setEmail] = useState('');
-  const [isValidEmail, setIsValidEmail] = useState(true);
+  // first step
+  const [step, setStep] = useState<Step>('email');
+  const navigate = useNavigate();
 
-  const validateEmail = (email: string) => {
-    const re = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
-    return re.test(email);
+  const email = useTypedSelector((state) => state.user.email);
+  const code = useTypedSelector((state) => state.user.code);
+  const nickname = useTypedSelector((state) => state.user.nickname);
+
+  // 이메일 중복체크
+  const checkEmail = (value : string): boolean => {
+    axios
+      .get(USER_URL_PREFIX + "/duplicate", {
+        params: {
+          type: "email",
+          value: value,
+        },
+      })
+      .then((response) => {
+        // 서버응답 처리
+        console.log(response.status);
+        return true;
+      })
+      .catch((error) => {
+        console.error('There was an error!', error);
+      });
+      
+      return false;
+  }
+  
+
+  // 인증번호 전송
+  const sendVerifyCode = (): void => {
+    console.log(email);
+    axios
+      .post(USER_URL_PREFIX + "/email/auth-code", {
+          email: email,
+      })
+      .then((response) => {
+        // 서버응답 처리
+        console.log("sendVerifyCode: " + response.status);
+      })
+      .catch((error) => {
+        console.error('There was an error!', error);
+      })
+  }
+
+  // 인증번호 체크
+  const checkVerifyCode = (value1 : string, value2 : string): void => {
+    console.log("checkVerifyCode");
+    axios
+      .post(USER_URL_PREFIX + "/email/auth", {
+          email: value1,
+          code: value2,
+      })
+      .then((response) => {
+        console.log(response.status);
+        navigate("/nickname");
+      })
+      .catch((error) => {
+        console.error('There was an error!', error);
+      });
   };
 
-  const handleEmailChange = (value: string) => {
-    setEmail(value);
-    // 입력값이 비어있지 않을 때만 유효성 검사를 수행
-    if (value.trim() !== '') {
-      setIsValidEmail(validateEmail(value));
-    } else {
-      // 입력값이 비어있으면 유효성 상태를 true로 설정
-      setIsValidEmail(true);
+
+
+
+  const handleNextStep = useCallback(() => {
+    const currentIndex = steps.indexOf(step);
+    console.log(email);
+
+    // Email button
+    if(step === 'email') {
+      checkEmail(email) ? sendVerifyCode() : console.log("중복된 이메일");
     }
-  };
+
+    // Verify button
+    if(step === 'verify') {
+      checkVerifyCode(email, "1234");
+    }
+
+    // Nickname button
+    if(step === 'nickname') {
+      console.log(nickname);
+    }
+
+    // Password button
+    if(step === 'password') {
+      console.log("password");
+    }
+
+    if (currentIndex < steps.length - 1) {
+      setStep(steps[currentIndex + 1]);
+    } else {
+      navigate("/login");
+    }
+  }, [step, email, navigate]);
+
+  const StepComponent = stepComponents[step];
 
   return (
     <div className="mx-auto bg-white flex flex-col h-screen">
-      <AppBar/>
-      <Title title="회원가입" />      
+      <AppBar />
+      <Title title="회원가입" />
       <div className="flex-grow flex flex-col justify-center px-6">
-        <div className="mb-16">
-          <Input
-            fullWidth
-            label="이메일"
-            variant="outlined"
-            value={email}
-            onChange={handleEmailChange}
-            error={!isValidEmail}
-            helperText={!isValidEmail ? "올바른 이메일 형식이 아닙니다." : "가입하실 이메일을 입력해주세요."}
-          />
-        </div>
-        
+        <StepComponent />
         <div className="mt-auto mb-64">
           <Button
+            variant="contained"
             fullWidth
-            disabled={!isValidEmail || email.trim() === ''}
+            className="bg-blue-500 hover:bg-blue-600 py-3"
+            onClick={handleNextStep}
           >
-            다음
+            {step === 'completeRegist' ? '로그인' : '다음'}
           </Button>
         </div>
       </div>
