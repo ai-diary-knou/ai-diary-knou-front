@@ -1,68 +1,61 @@
-import { configureStore, createSlice } from "@reduxjs/toolkit";
-import type { PayloadAction } from "@reduxjs/toolkit";
+import { configureStore, createSlice } from '@reduxjs/toolkit'
+import type { PayloadAction } from '@reduxjs/toolkit'
 
-interface UserState {
+interface SignupState {
   email: string;
+  verificationCode: string;
   nickname: string;
-  code: string;
-  key: string;
+  password: string;
+  rePassword: string;
+  currentStep: number;
 }
 
-const initialState: UserState = {
-  email: "",
-  nickname: "",
-  code: "",
-  key: "",
+const initialState: SignupState = {
+  email: '',
+  verificationCode: '',
+  nickname: '',
+  password: '',
+  rePassword: '',
+  currentStep: 1,
 };
 
-const userSlice = createSlice({
-  name: "user",
+const signupSlice = createSlice({
+  name: 'signup',
   initialState,
   reducers: {
-    setEmail(state, action: PayloadAction<string>) {
+    setEmail: (state, action: PayloadAction<string>) => {
       state.email = action.payload;
-      //localStorage.setItem('email', action.payload);
     },
-    setNickname(state, action: PayloadAction<string>) {
+    setVerificationCode: (state, action: PayloadAction<string>) => {
+      state.verificationCode = action.payload;
+    },
+    setNickname: (state, action: PayloadAction<string>) => {
       state.nickname = action.payload;
     },
-    setCode(state, action: PayloadAction<string>) {
-      state.code = action.payload;
+    setPassword: (state, action: PayloadAction<string>) => {
+      state.password = action.payload;
     },
-    setKey(state, action: PayloadAction<string>) {
-      state.key = action.payload;
+    setRePassword: (state, action: PayloadAction<string>) => {
+      state.rePassword = action.payload;
     },
-    setUser(state, action: PayloadAction<UserState>) {
-      state.email = action.payload.email;
-      state.nickname = action.payload.nickname;
-      state.code = action.payload.code;
-      state.key = action.payload.key;
+    nextStep: (state) => {
+      state.currentStep += 1;
     },
-    clearUser(state) {
-      state.email = "";
-      state.nickname = "";
-      state.code = "";
-      state.key = "";
+    prevStep: (state) => {
+      state.currentStep -= 1;
     },
   },
 });
 
-const store = configureStore({
+let store = configureStore({
   reducer: {
-    user: userSlice.reducer,
-  },
-});
+    signup: signupSlice.reducer
+  }
+})
 
 // store의 타입 미리 export 해두기
-export type RootState = ReturnType<typeof store.getState>;
-export type AppDispatch = typeof store.dispatch;
+export type RootState = ReturnType<typeof store.getState>
+export type AppDispatch = typeof store.dispatch
 
-export const {
-  setEmail,
-  setNickname,
-  setCode,
-  setKey,
-  setUser,
-  clearUser,
-} = userSlice.actions;
+export const { setEmail, setVerificationCode, setNickname, setPassword, setRePassword, nextStep, prevStep } = signupSlice.actions;
 export default store;

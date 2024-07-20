@@ -5,36 +5,67 @@ import Cookies from 'js-cookie';
 
 // 컴포넌트 임포트
 import Onboarding from "./pages/onboarding";
-import Email from "./pages/regist/email";
-import Verify from "./pages/regist/verify";
-import Password from "./pages/regist/password";
-import Login from "./pages/regist/login";
-import CompleteRegist from "./pages/regist/completeRegist";
-import Nickname from "./pages/regist/nickname";
+import Login from "./pages/login";
 
 import Regist from "./pages/regist";
 
+import axios from "axios";
+import { USER_URL_PREFIX } from './mocks/users/handlers';
+import React from "react";
+
 // 토큰 확인
-const isAuthenticated = (): boolean => {
+const checkToken = async (): Promise<'valid' | 'invalid' | 'none'> => {
   const token = Cookies.get('accessToken');
-  return !!token;
+  if (!token) return 'none';
+
+  try {
+    const response = await axios.post(`${USER_URL_PREFIX}/me`, { token });
+    return response.data.status !== 'FAIL' ? 'valid' : 'invalid';
+  } catch (error) {
+    console.error('There was an error!', error);
+    return 'invalid';
+  }
 };
 
-// 공개 페이지
+// 라우트 보호 컴포넌트
 const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
-  /*
-  if (!isAuthenticated()) {
+  const [tokenStatus, setTokenStatus] = React.useState<'valid' | 'invalid' | 'none' | 'loading'>('loading');
+
+  React.useEffect(() => {
+    checkToken().then(setTokenStatus);
+  }, []);
+
+  if (tokenStatus === 'loading') {
+    return <div>Loading...</div>; // Or some loading component
+  }
+
+  if (tokenStatus === 'none') {
+    return <Navigate to="/onboarding" replace />;
+  }
+
+  if (tokenStatus === 'invalid') {
     return <Navigate to="/login" replace />;
-  }*/
+  }
+
   return children;
 };
 
-// 비공개 페이지
+// 공개 라우트 컴포넌트
 const PublicRoute = ({ children }: { children: React.ReactNode }) => {
-  /*
-  if (isAuthenticated()) {
+  const [tokenStatus, setTokenStatus] = React.useState<'valid' | 'invalid' | 'none' | 'loading'>('loading');
+
+  React.useEffect(() => {
+    checkToken().then(setTokenStatus);
+  }, []);
+
+  if (tokenStatus === 'loading') {
+    return <div>Loading...</div>; // Or some loading component
+  }
+
+  if (tokenStatus === 'valid') {
     return <Navigate to="/" replace />;
-  }*/
+  }
+
   return children;
 };
 
@@ -49,27 +80,7 @@ const router = createBrowserRouter([
   },
   {
     path: "/onboarding",
-    element: <ProtectedRoute><Onboarding /></ProtectedRoute>,
-  },
-  {
-    path: "/email",
-    element: <PublicRoute><Email /></PublicRoute>,
-  },
-  {
-    path: "/verify",
-    element: <PublicRoute><Verify /></PublicRoute>,
-  },
-  {
-    path: "/password",
-    element: <PublicRoute><Password /></PublicRoute>,
-  },
-  {
-    path: "/completeRegist",
-    element: <PublicRoute><CompleteRegist /></PublicRoute>,
-  },
-  {
-    path: "/nickname",
-    element: <PublicRoute><Nickname /></PublicRoute>,
+    element: <PublicRoute><Onboarding /></PublicRoute>,
   },
   {
     path: "/regist",

@@ -2,15 +2,15 @@ import React, { useState } from 'react';
 
 import { useNavigate } from "react-router-dom";
 
-import Input from "../../components/shared/Input"
-import Button from '../../components/shared/Button'
-import AppBar from '../../components/shared/AppBar';
-import Title from '../../components/shared/Title';
+import Input from "../components/shared/Input"
+import Button from '../components/shared/Button'
+import AppBar from '../components/shared/AppBar';
+import Title from '../components/shared/Title';
 
 import axios from 'axios';
 
-import { USER_URL_PREFIX } from '../../mocks/users/handlers';
-import { setCookie } from '../../common/cookie';
+import { USER_URL_PREFIX } from '../mocks/users/handlers';
+import { setCookie } from '../common/cookie';
 
 const Login: React.FC = () => {
   //const navigate = useNavigate();

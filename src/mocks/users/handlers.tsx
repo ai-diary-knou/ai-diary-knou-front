@@ -14,7 +14,8 @@ export const usersHandlers = [
       rePassword: string;
     };
 
-    if (password !== rePassword) {
+    // error
+    if (password != rePassword) {
       return HttpResponse.json({
         status: "FAIL",
         code: "INVALID_PARAMETER",
@@ -30,12 +31,14 @@ export const usersHandlers = [
       });
     }
 
-    if (email === "test@gmail.com") {
+    if (email === "1229juwon67@gmail.com" && password === "Aa!123456" && rePassword === "Aa!123456") {
       return HttpResponse.json({
         status: "SUCCESS",
         data: null,
       });
     }
+
+
   }),
 
   // 로그인
@@ -43,6 +46,8 @@ export const usersHandlers = [
     const body = await request.json();
 
     const { email, password } = body as { email: string; password: string };
+
+    // 
 
     if (email === "test@gmail.com" && password === "Aa!123456") {
       return HttpResponse.json({
@@ -144,6 +149,13 @@ export const usersHandlers = [
       });
     }
 
+    if (type === "email" && value === "1229juwon67@gmail.com") {
+      return HttpResponse.json({
+        status: "SUCCESS",
+        data: null,
+      });
+    }
+
     return HttpResponse.json({
       status: "SUCCESS",
       data: null,
@@ -171,6 +183,32 @@ export const usersHandlers = [
       return HttpResponse.json({
         status: "SUCCESS",
         data: null,
+      });
+    }
+  }),
+
+  // 토큰 정보 확인
+  http.post(USER_URL_PREFIX + "/me", async ({ request }) => {
+    const body = await request.json();
+
+    const { token } = body as { token: string };
+
+    if (token === "1") {
+      return HttpResponse.json({
+        status: "FAIL",
+        code: "USER_TOKEN_ERROR",
+        message: ".",
+      });
+    }
+
+    if (token === "1229juwon67@gmail.com") {
+      return HttpResponse.json({
+        status: "SUCCESS",
+        data: {
+          "userId" : 1,
+          "email" : "@gmail.com",
+          "nickname" : "d"
+        },
       });
     }
   }),
