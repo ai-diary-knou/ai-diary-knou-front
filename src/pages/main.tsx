@@ -6,8 +6,6 @@ import Slider from "../components/main/Slider";
 import Typography from "../components/shared/Typography";
 import axios from "axios";
 import { DIARY_URL_PREFIX } from "../mocks/diary/handlers";
-import { useEffect } from "react";
-import { USER_URL_PREFIX } from "../mocks/users/handlers";
 
 const MainPage = () => {
   const { data, isLoading } = useQuery({
@@ -18,19 +16,6 @@ const MainPage = () => {
       return response.data.data;
     },
   });
-
-  useEffect(() => {
-    axios
-      .get(USER_URL_PREFIX + "/duplicate", {
-        params: {
-          type: "email",
-          value: "test@gmail.com",
-        },
-      })
-      .then((response) => {
-        console.log(response.data);
-      });
-  }, []);
 
   if (isLoading || data === undefined) {
     return <></>;
