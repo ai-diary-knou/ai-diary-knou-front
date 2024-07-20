@@ -9,25 +9,22 @@ import { DIARY_URL_PREFIX } from "../mocks/diary/handlers";
 
 const CalendarPage = () => {
   const [selectedDate, setSelectedDate] = useState<Dayjs>(dayjs());
+  const [selectedMonth, setSelectedMonth] = useState<Dayjs>(dayjs());
 
-  const { data, isLoading } = useQuery({
-    queryKey: ["monthly-reports", selectedDate.format("YYYY-MM-DD")],
+  const { data } = useQuery({
+    queryKey: ["monthly-reports", selectedMonth.format("YYYY-MM-DD")],
     queryFn: async () => {
       const response = await axios.get(DIARY_URL_PREFIX + "/monthly-reports", {
         params: {
-          year: selectedDate.year(),
-          month: selectedDate.month() + 1,
-          date: selectedDate.date(),
+          year: selectedMonth.year(),
+          month: selectedMonth.month() + 1,
+          date: selectedMonth.date(),
         },
       });
 
       return response.data.data;
     },
   });
-
-  if (isLoading || data === undefined) {
-    return <></>;
-  }
 
   const diaryReport = data?.monthlyDiaryReports?.find(
     (diaryReport: {
@@ -50,8 +47,9 @@ const CalendarPage = () => {
       <Typography variant="h5">한달간의 기록</Typography>
       <div className="my-[60px]">
         <Calendar
-          diaryWritedDays={diaryWritedDays}
+          diaryWritedDays={diaryWritedDays || []}
           onSelectDate={setSelectedDate}
+          onSelectMonth={setSelectedMonth}
         />
       </div>
       <div>

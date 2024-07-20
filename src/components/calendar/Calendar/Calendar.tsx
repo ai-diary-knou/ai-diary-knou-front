@@ -33,15 +33,20 @@ function ServerDay(
 
 interface CalendarProps {
   onSelectDate: (date: Dayjs) => void;
+  onSelectMonth: (date: Dayjs) => void;
   diaryWritedDays: number[];
 }
 
-const Calendar = ({ onSelectDate, diaryWritedDays }: CalendarProps) => {
+const Calendar = ({
+  onSelectDate,
+  onSelectMonth,
+  diaryWritedDays,
+}: CalendarProps) => {
   return (
     <LocalizationProvider dateAdapter={AdapterDayjs}>
       <DateCalendar
         onChange={(value: Dayjs) => onSelectDate(value)}
-        onMonthChange={(value: Dayjs) => onSelectDate(value)}
+        onMonthChange={(value: Dayjs) => onSelectMonth(value)}
         slots={{
           day: ServerDay,
         }}
