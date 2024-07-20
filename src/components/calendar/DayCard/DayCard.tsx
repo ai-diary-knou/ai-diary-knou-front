@@ -26,7 +26,7 @@ const DayCard = ({ diaryReport }: DayCardProps) => {
 
   return (
     <div className="w-full p-2 bg-main_color rounded-lg">
-      <Link to="/dairy/ded">
+      <Link to={`/dairy/${diaryReport.diaryId}`}>
         <div className="mb-3">
           <Typography variant="subtitle1" textAlign="left" color="white">
             {dayjs(diaryReport.entryDate).format("YYYY년 M월 D일 dddd")}
