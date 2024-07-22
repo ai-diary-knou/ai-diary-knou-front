@@ -44,8 +44,7 @@ const Verify: React.FC = () => {
       if (isCodeValid) {
         dispatch(nextStep());
       } else {
-        console.log("인증번호가 일치하지 않습니다.");
-        dispatch(nextStep());
+        console.log('인증번호가 일치하지 않습니다.');
       }
     }
   };
@@ -56,23 +55,18 @@ const Verify: React.FC = () => {
     return `${String(minutes).padStart(2, '0')}:${String(secs).padStart(2, '0')}`;
   };
 
-  const checkVerifyCode = (value1: string, value2: string): boolean=> {
-    console.log(value1);
-    console.log(value2);
-    axios
-      .post(`${USER_URL_PREFIX}/email/auth`, {
+  const checkVerifyCode = async (value1: string, value2: string): Promise<boolean> => {
+    try {
+      const response = await axios.post(`${USER_URL_PREFIX}/email/auth`, {
         email: value1,
         code: value2,
-      })
-      .then((response) => {
-        console.log(response.data);
-        return true;
-      })
-      .catch((error) => {
-        console.error('There was an error!', error);
-        return false
       });
+      console.log(response.data);
+      return true;
+    } catch (error) {
+      console.error('There was an error!', error);
       return false;
+    }
   };
 
   return (
@@ -117,7 +111,3 @@ const Verify: React.FC = () => {
 };
 
 export default Verify;
-
-function dispatch(arg0: { payload: string; type: "user/setVerifyCode"; }) {
-  throw new Error('Function not implemented.');
-}

@@ -4,7 +4,6 @@ import { RootState } from '../store/store';
 
 import Email from '../components/regist/email';
 import Verify from '../components/regist/verify';
-import Nickname from '../components/regist/nickname';
 import Password from '../components/regist/password';
 import CompleteRegist from '../components/regist/completeRegist';
 
@@ -15,7 +14,7 @@ const Regist: React.FC = () => {
   const currentStep = useSelector((state: RootState) => state.signup.currentStep);
 
   const completeProps = {
-    text: "성장일기님 회원 가입을 축하드립니다!!",
+    text: "변경하신 비밀번호로 로그인 해주세요.",
   };
 
   const renderStep = () => {
@@ -25,10 +24,8 @@ const Regist: React.FC = () => {
       case 2:
         return <Verify />;
       case 3:
-        return <Nickname />;
-      case 4:
         return <Password />;
-      case 5:
+      case 4:
         return <CompleteRegist {...completeProps}/>;
       default:
         return null;
@@ -38,7 +35,7 @@ const Regist: React.FC = () => {
   return (
     <div className="mx-auto bg-white flex flex-col h-screen">
         <AppBar />
-        <Title title="회원가입" />
+        <Title title="비밀번호 변경" />
         <div className="flex-grow flex flex-col justify-center px-6">
             {renderStep()}
         </div>

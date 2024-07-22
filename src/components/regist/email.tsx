@@ -30,7 +30,7 @@ const Email: React.FC = () => {
       });
   };
 
-  const sendVerifcationCode = (value: string): void => {
+  const sendVerifcationCode = async (value: string): Promise<void> => {
     axios
       .post(`${USER_URL_PREFIX}/email/auth-code`, {
         email: value,
@@ -44,7 +44,7 @@ const Email: React.FC = () => {
   };
 
   const validateEmail = (email: string): boolean => {
-    const re = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
+    const re = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
     return re.test(email);
   };
 
@@ -75,7 +75,7 @@ const Email: React.FC = () => {
           value={email}
           onChange={(e) => handleEmailChange(e)}
           error={!isValidEmail}
-          helperText={!isValidEmail ? "올바른 이메일 형식이 아닙니다." : "가입하실 이메일을 입력해주세요."}
+          helperText={!isValidEmail ? "올바른 이메일 형식이 아닙니다." : "이메일을 입력해주세요."}
         />
       </div>
       <div className="mt-auto mb-64">

@@ -38,6 +38,14 @@ const signupSlice = createSlice({
     setRePassword: (state, action: PayloadAction<string>) => {
       state.rePassword = action.payload;
     },
+    setIniterlize: (state) => {
+      state.email = '';
+      state.verificationCode = '';
+      state.nickname = '';
+      state.password = '';
+      state.rePassword = '';
+      state.currentStep = 1;
+    },
     nextStep: (state) => {
       state.currentStep += 1;
     },
@@ -57,5 +65,5 @@ let store = configureStore({
 export type RootState = ReturnType<typeof store.getState>
 export type AppDispatch = typeof store.dispatch
 
-export const { setEmail, setVerificationCode, setNickname, setPassword, setRePassword, nextStep, prevStep } = signupSlice.actions;
+export const { setEmail, setVerificationCode, setNickname, setPassword, setRePassword, setIniterlize, nextStep, prevStep } = signupSlice.actions;
 export default store;

@@ -1,7 +1,5 @@
 import React, { useState } from 'react';
 
-import { useNavigate } from "react-router-dom";
-
 import Input from "../components/shared/Input"
 import Button from '../components/shared/Button'
 import AppBar from '../components/shared/AppBar';
@@ -10,10 +8,13 @@ import Title from '../components/shared/Title';
 import axios from 'axios';
 
 import { USER_URL_PREFIX } from '../mocks/users/handlers';
-import { setCookie } from '../common/cookie';
+import { useNavigate } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
+import { AppDispatch, setIniterlize } from '../store/store';
 
 const Login: React.FC = () => {
-  //const navigate = useNavigate();
+  const navigate = useNavigate();
+  const dispatch = useDispatch<AppDispatch>();
 
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -43,18 +44,17 @@ const Login: React.FC = () => {
         // 서버응답 처리
         console.log(response.status);
         console.log(response.data);
-
-        if (response.data.token) {
-          setCookie('accessToken', response.data.token);
-          // navigate('/home');
-        } else {
-          console.error('Login successful but no token received');
-        }
       })
       .catch((error) => {
         console.error('There was an error!', error);
       })
   }
+
+  const handleClick = () => {
+    // 필요한 상태 초기화
+    dispatch(setIniterlize());
+    navigate('/forgotPassword');
+  };
 
   return (
     <div className="mx-auto bg-white flex flex-col h-screen">
@@ -81,6 +81,11 @@ const Login: React.FC = () => {
             onChange={handlePasswordChange}
             type="password"
           />
+        </div>
+        <div className="mb-4 text-right">
+          <button onClick={handleClick} className="text-sm bg-transparent border-none cursor-pointer text-blue-600 hover:text-blue-800">
+            비밀번호 찾기
+          </button>
         </div>
         <div className="mt-auto mb-64">
           <Button

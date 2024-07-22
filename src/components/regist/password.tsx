@@ -7,7 +7,6 @@ import { useSelector, useDispatch } from 'react-redux';
 import Button from '../shared/Button';
 import axios from 'axios';
 import { USER_URL_PREFIX } from '../../mocks/users/handlers';
-import Regist from './nickname';
 
 
 const Password: React.FC = () => {
@@ -23,7 +22,7 @@ const Password: React.FC = () => {
   
   const validatePassword = (password: string) => {
     // 최소 8자, 최대 20자, 최소 하나의 대문자, 소문자, 숫자, 특수문자 포함
-    const re = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,20}$/;
+    const re = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,16}$/;
     return re.test(password);
   };
 
@@ -42,37 +41,36 @@ const Password: React.FC = () => {
 
   const handleNextStep = async (): Promise<void> => {
     if (isValidPassword && password.trim() !== '') {
-      const isEmailValid = await regist();
-      dispatch(nextStep());
-      /*
-      if (isEmailValid) {
+      const isPasswordValid = await regist();
+      if (isPasswordValid) {
         dispatch(nextStep());
       } else {
-        console.log("중복된 이메일");
-      }*/
+        console.log("회원가입 오류");
+      }
     }
   };
-
-  const regist = (): void => {
+  
+  const regist = async (): Promise<boolean> => {
     console.log(email);
     console.log(nickname);
     console.log(password);
     console.log(rePassword);
-
-    axios
-      .post(USER_URL_PREFIX, {
-          email: email,
-          nickname: nickname,
-          password: password,
-          rePassword: rePassword,
-      })
-      .then((response) => {
-        // 서버응답 처리
-        console.log(response.data);
-      })
-      .catch((error) => {
-        console.error('There was an error!', error);
-      })
+  
+    try {
+      const response = await axios.post(USER_URL_PREFIX, {
+        email: email,
+        nickname: nickname,
+        password: password,
+        rePassword: rePassword,
+      });
+      
+      // 서버응답 처리
+      console.log(response.data);
+      return true;
+    } catch (error) {
+      console.error('There was an error!', error);
+      return false;
+    }
   };
 
   return (

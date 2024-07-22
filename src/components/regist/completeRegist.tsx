@@ -2,14 +2,18 @@ import React from 'react';
 import Button from '../shared/Button';
 import { useNavigate } from 'react-router-dom';
 
-const Verify: React.FC = () => {
+interface completeProps {
+  text: string;
+}
+
+const Verify: React.FC<completeProps> = ({text}) => {
 
   const navigate = useNavigate();
-  
+
   return (
     <>
       <div className="items-center mb-16">
-        <label className="flex justify-center items-center">성장일기님 회원 가입을 축하드립니다!</label>
+        <label className="flex justify-center items-center">{`${text}`}</label>
       </div>
       <div className="mt-auto mb-64">
       <Button
