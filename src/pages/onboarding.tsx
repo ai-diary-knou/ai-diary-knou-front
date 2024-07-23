@@ -9,6 +9,9 @@ import ob1 from '../assets/Ob1.png';
 import ob2 from '../assets/Ob2.png';
 import ob3 from '../assets/Ob3.png';
 import { useNavigate } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
+import { AppDispatch } from '../store/store';
+import { setInitialize } from '../store/signupSlice';
 
 interface Page {
   title: string;
@@ -18,6 +21,7 @@ interface Page {
 
 const OnboardingPage: React.FC = () => {
   const navigate = useNavigate();
+  const dispatch = useDispatch<AppDispatch>();
   const [currentSlide, setCurrentSlide] = useState<number>(0);
 
   const pages: Page[] = [
@@ -59,6 +63,7 @@ const OnboardingPage: React.FC = () => {
     if (currentSlide < pages.length - 1) {
       sliderRef.current?.slickNext();
     }else{
+      dispatch(setInitialize());
       navigate('/regist');
     }
   };

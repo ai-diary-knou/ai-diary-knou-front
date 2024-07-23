@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState, AppDispatch } from '../../store/store';
 import { setEmail, nextStep } from '../../store/signupSlice';
@@ -11,36 +11,78 @@ const Email: React.FC = () => {
   const dispatch = useDispatch<AppDispatch>();
   const email = useSelector((state: RootState) => state.signup.email);
   const [isValidEmail, setIsValidEmail] = useState(true);
+  const [helperMessage, setHelperMessage] = useState("이메일을 입력해주세요.");
+  const [isLoading, setIsLoading] = useState(false);
+  const [isCheckingEmail, setIsCheckingEmail] = useState(false);
 
-  const checkEmail = (value: string): Promise<boolean> => {
-    return axios
-      .get(`${USER_URL_PREFIX}/duplicate`, {
+  // async function
+  const checkEmail = async (value: string): Promise<{ isValid: boolean; code: string }> => {
+
+  // 잦은 API 요청을 방지하기 위한 1차 검증
+    if (!value.trim() || !validateEmail(value)) {
+      return { isValid: false, code: "INVALID_PARAMETER" };
+    }
+    
+    try {
+      const response = await axios.get(`${USER_URL_PREFIX}/duplicate`, {
         params: {
           type: "email",
           value: value,
         },
-      })
-      .then((response) => {
-        console.log(response.data);
-        return true;
-      })
-      .catch((error) => {
-        console.error('There was an error!', error);
-        return false;
       });
+      console.log(response.data);
+      return { isValid: response.data.status === 'SUCCESS', code: response.data.code };
+    } catch (error) {
+      console.error(error);
+      return { isValid: false, code: "ERROR" };
+    }
   };
 
-  const sendVerifcationCode = async (value: string): Promise<void> => {
-    axios
-      .post(`${USER_URL_PREFIX}/email/auth-code`, {
+  useEffect(() => {
+    const validateEmailInput = async () => {
+      if (email.trim() !== '') {
+        setIsCheckingEmail(true);
+
+        // start checking email 
+        const { isValid, code } = await checkEmail(email);
+        setIsValidEmail(isValid);
+
+        switch (code) {
+          case "INVALID_PARAMETER":
+            setHelperMessage("올바른 이메일 형식이 아닙니다.");
+            break;
+          case "USER_ALREADY_REGISTERED":
+            setHelperMessage("중복된 이메일입니다.");
+            break;
+          case "ERROR":
+            // alert("서버와 통신 중 오류가 발생했습니다.");
+            break;
+          default:
+            setHelperMessage("");
+            break;
+        }
+        
+        // finish checking email
+        setIsCheckingEmail(false);
+      } else {
+        setIsValidEmail(true);
+        setHelperMessage("가입하실 이메일을 입력해주세요.");
+      }
+    };
+
+    validateEmailInput();
+  }, [email]);
+
+  const sendVerificationCode = async (value: string): Promise<void> => {
+    try {
+      const response = await axios.post(`${USER_URL_PREFIX}/email/auth-code`, {
         email: value,
-      })
-      .then((response) => {
-        console.log(response.data);
-      })
-      .catch((error) => {
-        console.error('There was an error!', error);
       });
+      console.log(response.data);
+    } catch (error) {
+      console.error(error);
+      //alert("인증 코드 발송 중 오류가 발생했습니다.");
+    }
   };
 
   const validateEmail = (email: string): boolean => {
@@ -50,17 +92,22 @@ const Email: React.FC = () => {
 
   const handleEmailChange = (value: string): void => {
     dispatch(setEmail(value));
-    setIsValidEmail(value.trim() === '' || validateEmail(value));
+    if (value.trim() === '') {
+      setIsValidEmail(true);
+    }
   };
 
   const handleNextStep = async (): Promise<void> => {
     if (isValidEmail && email.trim() !== '') {
-      const isEmailValid = await checkEmail(email);
-      if (isEmailValid) {
-        sendVerifcationCode(email);
+      setIsLoading(true);
+      try {
+        await sendVerificationCode(email);
         dispatch(nextStep());
-      } else {
-        console.log("중복된 이메일");
+      } catch (error) {
+        console.error(error);
+        //alert("인증 코드 발송 중 오류가 발생했습니다.");
+      } finally {
+        setIsLoading(false);
       }
     }
   };
@@ -75,7 +122,8 @@ const Email: React.FC = () => {
           value={email}
           onChange={(e) => handleEmailChange(e)}
           error={!isValidEmail}
-          helperText={!isValidEmail ? "올바른 이메일 형식이 아닙니다." : "이메일을 입력해주세요."}
+          helperText={helperMessage}
+          disabled={isLoading}
         />
       </div>
       <div className="mt-auto mb-64">
@@ -84,9 +132,9 @@ const Email: React.FC = () => {
           fullWidth
           className="bg-blue-500 hover:bg-blue-600 py-3"
           onClick={handleNextStep}
-          disabled={!isValidEmail || email.trim() === ''}
+          disabled={!isValidEmail || email.trim() === '' || isLoading || isCheckingEmail}
         >
-          다음
+          {isLoading ? "처리 중..." : "다음"}
         </Button>
       </div>
     </>

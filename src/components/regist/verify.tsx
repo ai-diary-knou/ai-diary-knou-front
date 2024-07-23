@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { useDispatch, useSelector } from 'react-redux'
-import { TextField } from '@mui/material';
+import Input from "../shared/Input";
 import { AppDispatch, RootState} from '../../store/store';
 import {nextStep, setVerificationCode} from '../../store/signupSlice';
 import Button from '../shared/Button';
@@ -11,41 +11,55 @@ const Verify: React.FC = () => {
   const dispatch = useDispatch<AppDispatch>();
   const code = useSelector((state: RootState) => state.signup.verificationCode);
   const email = useSelector((state: RootState) => state.signup.email);
-
-  // timer
+  
   const [isValidCode, setIsValidCode] = useState(true);
-  const [timer, setTimer] = useState(180);
+  const [timer, setTimer] = useState(300); // 5 minutes
   const [isExpired, setIsExpired] = useState(false);
+  const [errorMessage, setErrorMessage] = useState('');
 
   useEffect(() => {
-    if (timer > 0 && !isExpired) {
-      const interval = setInterval(() => {
-        setTimer(prevTimer => prevTimer - 1);
-      }, 1000);
-      return () => clearInterval(interval);
-    } else if (timer === 0) {
-      setIsExpired(true);
-    }
-  }, [timer, isExpired]);
+    const interval = setInterval(() => {
+      setTimer((prevTimer) => {
+        if (prevTimer <= 1) {
+          clearInterval(interval);
+          setIsExpired(true);
+          return 0;
+        }
+        return prevTimer - 1;
+      });
+    }, 1000);
+
+    return () => clearInterval(interval);
+  }, []);
 
   const validateCode = (code: string) => {
-    const re = /./;
-    return re.test(code);
+    return /./.test(code); 
   };
 
-  const handleCodeChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const value = event.target.value;
+  const handleCodeChange = (value: string) => {
     dispatch(setVerificationCode(value));
-    setIsValidCode(value.trim() === '' || validateCode(value));
+    setIsValidCode(validateCode(value));
+    setErrorMessage('');
   };
 
   const handleNextStep = async (): Promise<void> => {
     if (isValidCode && code.trim() !== '') {
-      const isCodeValid = await checkVerifyCode(email, code);
-      if (isCodeValid) {
-        dispatch(nextStep());
-      } else {
-        console.log('인증번호가 일치하지 않습니다.');
+      try {
+        const isCodeValid = await checkVerifyCode(email, code);
+        if (isCodeValid.isValid) {
+          dispatch(nextStep());
+        } else {
+
+          if(isCodeValid.code === 'AUTH_CODE_EXPIRED') {
+            setErrorMessage('인증번호가 만료되었습니다.');
+          }
+          if(isCodeValid.code === 'EMAIL_AUTH_FAIL') {
+            setErrorMessage('인증번호가 올바르지 않습니다.');
+          }
+        }
+      } catch (error) {
+        console.error('Error during verification:', error);
+        //setErrorMessage('인증 과정에서 오류가 발생했습니다.');
       }
     }
   };
@@ -56,58 +70,52 @@ const Verify: React.FC = () => {
     return `${String(minutes).padStart(2, '0')}:${String(secs).padStart(2, '0')}`;
   };
 
-  const checkVerifyCode = async (value1: string, value2: string): Promise<boolean> => {
+  const checkVerifyCode = async (email: string, code: string): Promise<{ isValid: boolean; code: string }> => {
     try {
-      const response = await axios.post(`${USER_URL_PREFIX}/email/auth`, {
-        email: value1,
-        code: value2,
-      });
-      console.log(response.data);
-      return true;
+      const response = await axios.post(`${USER_URL_PREFIX}/email/auth`, { email, code });
+      return { isValid: response.data.status === 'SUCCESS', code: response.data.code };
     } catch (error) {
       console.error('There was an error!', error);
-      return false;
+      throw error;
     }
   };
 
   return (
     <>
       <div className="mb-16">
-        <TextField
+        <Input
           fullWidth
           label="인증코드"
           variant="outlined"
           value={code}
-          onChange={handleCodeChange}
-          error={!isValidCode}
-          size='small'
+          onChange={(e) => handleCodeChange(e)}
+          error={!isValidCode || !!errorMessage}
           helperText={
-            !isValidCode 
-              ? "인증번호를 확인해주세요." 
-              : isExpired 
-                ? "인증번호가 만료되었습니다." 
-                : "이메일로 전송된 인증번호를 5분 이내에 입력해주세요."
+            errorMessage || 
+            (isExpired
+              ? "인증번호가 만료되었습니다."
+              : "이메일로 전송된 인증번호를 5분 이내에 입력해주세요.")
           }
           disabled={isExpired}
         />
         {!isExpired && (
-          <div style={{ marginTop: '1px', marginLeft:'13px', fontSize: '0.75rem', }}>
+          <div style={{ marginTop: '8px', marginLeft:'13px', fontSize: '0.75rem', color: '#666' }}>
             남은 시간: {formatTime(timer)}
           </div>
         )}
       </div>
       <div className="mt-auto mb-64">
-      <Button
-        variant="contained"
-        fullWidth
-        className="bg-blue-500 hover:bg-blue-600 py-3"
-        onClick={handleNextStep}
-        disabled={!isValidCode || code.trim() === ''}
-      >
-        다음
-      </Button>
-    </div>
-  </>
+        <Button
+          variant="contained"
+          fullWidth
+          className="bg-blue-500 hover:bg-blue-600 py-3"
+          onClick={handleNextStep}
+          disabled={!isValidCode || code.trim() === '' || isExpired}
+        >
+          다음
+        </Button>
+      </div>
+    </>
   );
 };
 
