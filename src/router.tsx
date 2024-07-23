@@ -23,7 +23,7 @@ const router = createBrowserRouter([
         element: <DairyEditPage />,
       },
       {
-        path: "/dairy/:id",
+        path: "/dairy/:dairyId",
         element: <DairyDetailPage />,
       },
       {

@@ -1,8 +1,31 @@
-import { Link } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import Typography from "../components/shared/Typography";
 import DairyItem from "../components/dairyDetail/DairyItem";
+import { useQuery } from "@tanstack/react-query";
+import { DIARY_URL_PREFIX } from "../mocks/diary/handlers";
+import axios from "axios";
 
 const DairyDetailPage = () => {
+  const { dairyId } = useParams();
+
+  const { data, isLoading } = useQuery({
+    queryKey: ["dairy-detail", dairyId],
+    queryFn: async () => {
+      const response = await axios.get(DIARY_URL_PREFIX + `/${dairyId}`);
+
+      return response.data.data;
+    },
+    enabled: dairyId !== undefined,
+  });
+
+  if (isLoading) {
+    return (
+      <div className="w-full h-full flex justify-center items-center">
+        <Typography variant="h5">로딩 중...</Typography>
+      </div>
+    );
+  }
+
   return (
     <div className="mx-8 mt-[60px] mb-[80px]">
       <div className="flex justify-between items-end mb-[60px]">
@@ -11,7 +34,7 @@ const DairyDetailPage = () => {
           <br />
           7월 1일 월요일
         </Typography>
-        <Link to="/edit">
+        <Link to={`/edit?dairyId=${dairyId}`}>
           <Typography variant="caption">수정</Typography>
         </Link>
       </div>
