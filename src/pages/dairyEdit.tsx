@@ -1,9 +1,32 @@
 import { Typography } from "@mui/material";
-import { useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import Button from "../components/shared/Button";
+import { useLocation } from "react-router-dom";
+import { useQuery } from "@tanstack/react-query";
+import axios from "axios";
+import { DIARY_URL_PREFIX } from "../mocks/diary/handlers";
+import dayjs from "dayjs";
 
 const DairyEditPage = () => {
+  const location = useLocation();
+
+  const dairyId = location.search.split("=")[1];
+
+  const { data } = useQuery({
+    queryKey: ["dairy-detail", dairyId],
+    queryFn: async () => {
+      const response = await axios.get(DIARY_URL_PREFIX + `/${dairyId}`);
+
+      return response.data.data;
+    },
+    enabled: dairyId !== undefined,
+  });
+
   const [value, setValue] = useState("");
+
+  useEffect(() => {
+    setValue(data?.diaryContent || "");
+  }, [data]);
 
   const handleChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     setValue(e.target.value);
@@ -14,6 +37,11 @@ const DairyEditPage = () => {
     console.log(value);
   };
 
+  const today = useMemo(
+    () => (data?.entryDate ? dayjs(data.entryDate.split(" ")[0]) : dayjs()),
+    [data]
+  );
+
   return (
     <form onSubmit={handleSubmit} className="mx-8 my-[60px]">
       <Typography variant="h5" textAlign="center">
@@ -22,7 +50,7 @@ const DairyEditPage = () => {
       <div className="my-[60px]">
         <div className="mb-3 ml-[1px]">
           <Typography variant="subtitle1" textAlign="left">
-            2024년 7월 1일 목요일
+            {today.format("YYYY년 M월 D일 dddd")}
           </Typography>
         </div>
         <div className="mb-[60px]">
