@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux'
 import { TextField } from '@mui/material';
-import { AppDispatch, nextStep, RootState, setVerificationCode } from '../../store/store';
+import { AppDispatch, RootState} from '../../store/store';
+import {nextStep, setVerificationCode} from '../../store/signupSlice';
 import Button from '../shared/Button';
 import { USER_URL_PREFIX } from '../../mocks/users/handlers';
 import axios from 'axios';

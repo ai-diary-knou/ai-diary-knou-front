@@ -3,7 +3,8 @@ import { useDispatch, useSelector } from 'react-redux'
 
 import Input from "../../components/shared/Input";
 
-import { AppDispatch, nextStep, RootState, setNickname } from '../../store/store';
+import { AppDispatch, RootState } from '../../store/store';
+import { nextStep, setNickname } from '../../store/signupSlice';
 import Button from '../shared/Button';
 import { USER_URL_PREFIX } from '../../mocks/users/handlers';
 import axios from 'axios';

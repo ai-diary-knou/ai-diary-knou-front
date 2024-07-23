@@ -10,7 +10,8 @@ import axios from 'axios';
 import { USER_URL_PREFIX } from '../mocks/users/handlers';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
-import { AppDispatch, setIniterlize } from '../store/store';
+import { AppDispatch } from '../store/store';
+import { setInitialize } from '../store/signupSlice';
 
 const Login: React.FC = () => {
   const navigate = useNavigate();
@@ -52,7 +53,7 @@ const Login: React.FC = () => {
 
   const handleClick = () => {
     // 필요한 상태 초기화
-    dispatch(setIniterlize());
+    dispatch(setInitialize());
     navigate('/forgotPassword');
   };
 
@@ -83,7 +84,7 @@ const Login: React.FC = () => {
           />
         </div>
         <div className="mb-4 text-right">
-          <button onClick={handleClick} className="text-sm bg-transparent border-none cursor-pointer text-blue-600 hover:text-blue-800">
+          <button onClick={handleClick} className="text-sm bg-transparent border-none cursor-pointer hover:text-blue-800">
             비밀번호 찾기
           </button>
         </div>

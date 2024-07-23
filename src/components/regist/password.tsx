@@ -2,7 +2,8 @@ import React, { useState, useEffect } from 'react';
 
 
 import Input from "../../components/shared/Input"
-import { AppDispatch, nextStep, RootState, setPassword, setRePassword } from '../../store/store';
+import { AppDispatch, RootState } from '../../store/store';
+import { nextStep, setPassword, setRePassword } from '../../store/signupSlice';
 import { useSelector, useDispatch } from 'react-redux';
 import Button from '../shared/Button';
 import axios from 'axios';

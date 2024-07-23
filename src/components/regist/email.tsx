@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState, AppDispatch } from '../../store/store';
-import { setEmail, nextStep } from '../../store/store';
+import { setEmail, nextStep } from '../../store/signupSlice';
 import Input from "../shared/Input";
 import Button from '../shared/Button';
 import axios from 'axios';
