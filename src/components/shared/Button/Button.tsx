@@ -32,6 +32,10 @@ interface ButtonProps {
    * Whether the button should take up the full width.
    */
   fullWidth?: boolean;
+  /**
+   * visibile or invisible
+   */
+  className?: string;
 
   /**
    * The type of the button.
@@ -53,6 +57,7 @@ const Button = ({
   size = "large",
   children,
   fullWidth = false,
+  className,
   type = "button",
 }: ButtonProps) => {
   return (
@@ -63,6 +68,7 @@ const Button = ({
       disabled={disabled}
       onClick={onClick}
       size={size}
+      className={className}
       type={type}
     >
       {children}
