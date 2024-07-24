@@ -8,6 +8,7 @@ import { RouterProvider } from "react-router-dom";
 import ReactQueryProvider from "./providers/ReactQueryProvider.tsx";
 import ThemeProvider from "./providers/ThemeProvider.tsx";
 import ReduxProvider from "./providers/ReduxProvider.tsx";
+import ToastProvider from "./providers/ToastProvider.tsx";
 
 async function enableMocking() {
   if (process.env.NODE_ENV !== "development") {
@@ -28,6 +29,7 @@ enableMocking().then(() => {
         <ThemeProvider>
           <ReduxProvider>
             <RouterProvider router={router} />
+            <ToastProvider />
           </ReduxProvider>
         </ThemeProvider>
       </ReactQueryProvider>

@@ -1,5 +1,3 @@
-import Toast, { showToast } from "./Toast";
+import { showToast } from "./Toast";
 
 export { showToast };
-export default Toast;
-
