@@ -57,7 +57,7 @@ export const usersHandlers = [
     }else{
       return HttpResponse.json({
         status: "FAIL",
-        code: "INVALID_PARAMETER",
+        code: "USER_LOGIN_FAIL",
         message: "Invalid Parameter. email or password mismatch.",
       });
     }

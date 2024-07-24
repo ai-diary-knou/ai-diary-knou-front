@@ -66,7 +66,7 @@ const Password: React.FC = () => {
             setHelperMessage("가입된 계정입니다.");
             break;
           case "INVALID_PARAMETER":
-            setHelperMessage("");
+            setHelperMessage("유효하지 않는 비밀번호입니다.");
             break;
           case "SUCCESS":
             setHelperMessage("");
