@@ -6,6 +6,7 @@ import { setPassword, setRePassword, nextStep } from '../../../store/Slice/signu
 
 import Input from "../../shared/Input";
 import Button from '../../shared/Button';
+import { showToast } from '../../shared/Toast';
 
 import axios from 'axios';
 import { USER_URL_PREFIX } from '../../../mocks/users/handlers';
@@ -71,7 +72,12 @@ const Password: React.FC = () => {
             setHelperMessage("");
             break;
           case "ERROR":
-            setHelperMessage("비밀번호 검증 중 오류가 발생했습니다.");
+            showToast({
+              message: "비밀번호 검증 중 오류가 발생했습니다.",
+              type: "error",
+              position: "top-center",
+              autoClose: 3000
+            });
             break;
           default:
             setHelperMessage("");
