@@ -112,19 +112,35 @@ const router = createBrowserRouter([
       },
       {
         path: "/",
-        element: <MainPage />,
+        element: (
+          <ProtectedRoute>
+            <MainPage />,
+          </ProtectedRoute>
+        ),
       },
       {
         path: "/calendar",
-        element: <CalendarPage />,
+        element: (
+          <ProtectedRoute>
+            <CalendarPage />,
+          </ProtectedRoute>
+        ),
       },
       {
         path: "/edit",
-        element: <DairyEditPage />,
+        element: (
+          <ProtectedRoute>
+            <DairyEditPage />,
+          </ProtectedRoute>
+        ),
       },
       {
         path: "/dairy/:dairyId",
-        element: <DairyDetailPage />,
+        element: (
+          <ProtectedRoute>
+            <DairyDetailPage />,
+          </ProtectedRoute>
+        ),
       },
       {
         path: "/menu",
@@ -132,7 +148,11 @@ const router = createBrowserRouter([
       },
       {
         path: "/account",
-        element: <div>Account</div>,
+        element: (
+          <ProtectedRoute>
+            <div>Account</div>,
+          </ProtectedRoute>
+        ),
       },
     ],
   },

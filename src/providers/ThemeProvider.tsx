@@ -1,5 +1,4 @@
 import { createTheme } from "@mui/material/styles";
-import CssBaseline from "@mui/material/CssBaseline";
 import { ThemeProvider as Provider } from "@emotion/react";
 
 import "@fontsource/roboto/300.css";
