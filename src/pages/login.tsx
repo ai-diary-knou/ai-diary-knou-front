@@ -11,7 +11,7 @@ import { USER_URL_PREFIX } from '../mocks/users/handlers';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { AppDispatch } from '../store/store';
-import { setInitialize } from '../store/signupSlice';
+import { setInitialize } from '../store/Slice/signupSlice';
 
 const Login: React.FC = () => {
   const navigate = useNavigate();

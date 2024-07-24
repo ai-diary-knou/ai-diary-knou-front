@@ -11,7 +11,7 @@ import ob3 from '../assets/Ob3.png';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { AppDispatch } from '../store/store';
-import { setInitialize } from '../store/signupSlice';
+import { setInitialize } from '../store/Slice/signupSlice';
 
 interface Page {
   title: string;

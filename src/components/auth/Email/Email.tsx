@@ -1,11 +1,14 @@
 import React, { useState, useEffect } from 'react';
+
 import { useDispatch, useSelector } from 'react-redux';
-import { RootState, AppDispatch } from '../../store/store';
-import { setEmail, nextStep } from '../../store/signupSlice';
-import Input from "../shared/Input";
-import Button from '../shared/Button';
+import { RootState, AppDispatch } from '../../../store/store';
+import { setEmail, nextStep } from '../../../store/Slice/signupSlice';
+
+import Input from "../../shared/Input";
+import Button from '../../shared/Button';
+
 import axios from 'axios';
-import { USER_URL_PREFIX } from '../../mocks/users/handlers';
+import { USER_URL_PREFIX } from '../../../mocks/users/handlers';
 
 const Email: React.FC = () => {
   const dispatch = useDispatch<AppDispatch>();
@@ -18,7 +21,7 @@ const Email: React.FC = () => {
   // async function
   const checkEmail = async (value: string): Promise<{ isValid: boolean; code: string }> => {
 
-  // 잦은 API 요청을 방지하기 위한 1차 검증
+    // 잦은 API 요청을 방지하기 위한 1차 검증
     if (!value.trim() || !validateEmail(value)) {
       return { isValid: false, code: "INVALID_PARAMETER" };
     }
@@ -37,41 +40,6 @@ const Email: React.FC = () => {
       return { isValid: false, code: "ERROR" };
     }
   };
-
-  useEffect(() => {
-    const validateEmailInput = async () => {
-      if (email.trim() !== '') {
-        setIsCheckingEmail(true);
-
-        // start checking email 
-        const { isValid, code } = await checkEmail(email);
-        setIsValidEmail(isValid);
-
-        switch (code) {
-          case "INVALID_PARAMETER":
-            setHelperMessage("올바른 이메일 형식이 아닙니다.");
-            break;
-          case "USER_ALREADY_REGISTERED":
-            setHelperMessage("중복된 이메일입니다.");
-            break;
-          case "ERROR":
-            // alert("서버와 통신 중 오류가 발생했습니다.");
-            break;
-          default:
-            setHelperMessage("");
-            break;
-        }
-        
-        // finish checking email
-        setIsCheckingEmail(false);
-      } else {
-        setIsValidEmail(true);
-        setHelperMessage("가입하실 이메일을 입력해주세요.");
-      }
-    };
-
-    validateEmailInput();
-  }, [email]);
 
   const sendVerificationCode = async (value: string): Promise<void> => {
     try {
@@ -111,6 +79,41 @@ const Email: React.FC = () => {
       }
     }
   };
+
+  useEffect(() => {
+    const validateEmailInput = async () => {
+      if (email.trim() !== '') {
+        setIsCheckingEmail(true);
+
+        // start checking email 
+        const { isValid, code } = await checkEmail(email);
+        setIsValidEmail(isValid);
+
+        switch (code) {
+          case "INVALID_PARAMETER":
+            setHelperMessage("올바른 이메일 형식이 아닙니다.");
+            break;
+          case "USER_ALREADY_REGISTERED":
+            setHelperMessage("중복된 이메일입니다.");
+            break;
+          case "ERROR":
+            // alert("서버와 통신 중 오류가 발생했습니다.");
+            break;
+          default:
+            setHelperMessage("");
+            break;
+        }
+        
+        // finish checking email
+        setIsCheckingEmail(false);
+      } else {
+        setIsValidEmail(true);
+        setHelperMessage("가입하실 이메일을 입력해주세요.");
+      }
+    };
+
+    validateEmailInput();
+  }, [email]);
 
   return (
     <>

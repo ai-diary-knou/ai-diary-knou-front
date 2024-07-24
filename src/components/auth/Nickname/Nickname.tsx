@@ -1,12 +1,14 @@
 import React, { useState, useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux'
-import Input from "../../components/shared/Input";
-import { AppDispatch, RootState } from '../../store/store';
-import { nextStep, setNickname } from '../../store/signupSlice';
-import Button from '../shared/Button';
-import { USER_URL_PREFIX } from '../../mocks/users/handlers';
-import axios from 'axios';
 
+import { useDispatch, useSelector } from 'react-redux';
+import { RootState, AppDispatch } from '../../../store/store';
+import { setNickname, nextStep } from '../../../store/Slice/signupSlice';
+
+import Input from "../../shared/Input";
+import Button from '../../shared/Button';
+
+import axios from 'axios';
+import { USER_URL_PREFIX } from '../../../mocks/users/handlers';
 const Nickname: React.FC = () => {
   const dispatch = useDispatch<AppDispatch>();
   const nickname = useSelector((state: RootState) => state.signup.nickname);

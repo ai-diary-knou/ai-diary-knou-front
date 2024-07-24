@@ -2,11 +2,11 @@ import React from 'react';
 import { useSelector } from 'react-redux';
 import { RootState } from '../store/store';
 
-import Email from '../components/regist/email';
-import Verify from '../components/regist/verify';
-import Nickname from '../components/regist/nickname';
-import Password from '../components/regist/password';
-import CompleteRegist from '../components/regist/completeRegist';
+import Email from '../components/auth/Email';
+import Verify from '../components/auth/Verify';
+import Nickname from '../components/auth/Nickname';
+import Password from '../components/auth/Password';
+import Complete from '../components/auth/Complete';
 
 import AppBar from '../components/shared/AppBar';
 import Title from '../components/shared/Title';
@@ -29,7 +29,7 @@ const Regist: React.FC = () => {
       case 4:
         return <Password />;
       case 5:
-        return <CompleteRegist {...completeProps}/>;
+        return <Complete {...completeProps}/>;
       default:
         return null;
     }

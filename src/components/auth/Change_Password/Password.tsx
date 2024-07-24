@@ -1,11 +1,14 @@
 import React, { useState, useEffect } from 'react';
-import Input from "../../components/shared/Input"
-import { AppDispatch, RootState } from '../../store/store';
-import { nextStep, setPassword, setRePassword } from '../../store/signupSlice';
-import { useSelector, useDispatch } from 'react-redux';
-import Button from '../shared/Button';
+
+import { useDispatch, useSelector } from 'react-redux';
+import { RootState, AppDispatch } from '../../../store/store';
+import { setPassword, setRePassword, nextStep } from '../../../store/Slice/signupSlice';
+
+import Input from "../../shared/Input";
+import Button from '../../shared/Button';
+
 import axios from 'axios';
-import { USER_URL_PREFIX } from '../../mocks/users/handlers';
+import { USER_URL_PREFIX } from '../../../mocks/users/handlers';
 
 const Password: React.FC = () => {
   const dispatch = useDispatch<AppDispatch>();
@@ -16,7 +19,7 @@ const Password: React.FC = () => {
 
   const [isValidPassword, setIsValidPassword] = useState(true);
   const [passwordsMatch, setPasswordsMatch] = useState(true);
-  const [helperMessage, setHelperMessage] = useState("비밀번호를 입력해주세요.");
+  const [helperMessage, setHelperMessage] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [isCheckingPassword, setIsCheckingPassword] = useState(false);
 
@@ -34,7 +37,13 @@ const Password: React.FC = () => {
     }
 
     try {
-      const response = await axios.post(`${USER_URL_PREFIX}/validate-password`, { password: value });
+      const response = await axios.post(`${USER_URL_PREFIX}/login`, { 
+        email : email,
+        nickname : nickname,
+        password: value ,
+        rePassword : rePassword,
+      });
+      console.log(response.data);
       return { isValid: response.data.status === 'SUCCESS', code: response.data.code };
     } catch (error) {
       console.error('Error validating password:', error);
@@ -52,14 +61,11 @@ const Password: React.FC = () => {
         setPasswordsMatch(password === rePassword);
 
         switch (code) {
+          case "USER_ALREADY_REGISTERED":
+            setHelperMessage("가입된 계정입니다.");
+            break;
           case "INVALID_PARAMETER":
-            setHelperMessage("비밀번호는 8-16자의 대소문자, 숫자, 특수문자를 포함해야 합니다.");
-            break;
-          case "PASSWORD_MISMATCH":
-            setHelperMessage("비밀번호가 일치하지 않습니다.");
-            break;
-          case "COMMON_PASSWORD":
-            setHelperMessage("흔한 비밀번호입니다. 다른 비밀번호를 사용해주세요.");
+            setHelperMessage("");
             break;
           case "SUCCESS":
             setHelperMessage("");
@@ -76,7 +82,7 @@ const Password: React.FC = () => {
       } else {
         setIsValidPassword(true);
         setPasswordsMatch(true);
-        setHelperMessage("비밀번호를 입력해주세요.");
+        setHelperMessage("");
       }
     };
 
@@ -122,24 +128,24 @@ const Password: React.FC = () => {
           value={password}
           onChange={(e) => handlePasswordChange(e)}
           error={!isValidPassword && password !== ''}
-          helperText={helperMessage}
+          helperText={isValidPassword ? "" : helperMessage}
           secureTextEntry
           disabled={isLoading}
         />
-      </div>
-      <div className="mb-4">
-        <Input
-          fullWidth
-          label="비밀번호 확인"
-          variant="outlined"
-          value={rePassword}
-          onChange={(e) => handleRePasswordChange(e)}
-          error={!passwordsMatch && rePassword !== ''}
-          helperText={!passwordsMatch && rePassword !== '' ? "비밀번호가 일치하지 않습니다." : ""}
-          secureTextEntry
-          disabled={isLoading}
-        />
-      </div>
+    </div>
+    <div className="mb-4">
+      <Input
+        fullWidth
+        label="비밀번호 확인"
+        variant="outlined"
+        value={rePassword}
+        onChange={(e) => handleRePasswordChange(e)}
+        error={!passwordsMatch && rePassword !== ''}
+        helperText={!passwordsMatch && rePassword !== '' ? "비밀번호가 일치하지 않습니다." : ""}
+        secureTextEntry
+        disabled={isLoading}
+      />
+    </div>
       <div className="mt-auto mb-64">
         <Button
           variant="contained"

@@ -1,11 +1,14 @@
-import React, { useState, useEffect, useCallback } from 'react';
-import { useDispatch, useSelector } from 'react-redux'
-import Input from "../shared/Input";
-import { AppDispatch, RootState} from '../../store/store';
-import {nextStep, setVerificationCode} from '../../store/signupSlice';
-import Button from '../shared/Button';
-import { USER_URL_PREFIX } from '../../mocks/users/handlers';
+import React, { useState, useEffect } from 'react';
+
+import { useDispatch, useSelector } from 'react-redux';
+import { RootState, AppDispatch } from '../../../store/store';
+import { setVerificationCode, nextStep } from '../../../store/Slice/signupSlice';
+
+import Input from "../../shared/Input";
+import Button from '../../shared/Button';
+
 import axios from 'axios';
+import { USER_URL_PREFIX } from '../../../mocks/users/handlers';
 
 const Verify: React.FC = () => {
   const dispatch = useDispatch<AppDispatch>();
