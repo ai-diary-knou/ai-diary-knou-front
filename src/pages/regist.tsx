@@ -10,6 +10,7 @@ import Complete from '../components/auth/Complete';
 
 import AppBar from '../components/shared/AppBar';
 import Title from '../components/shared/Title';
+import ToastProvider from '../components/shared/Toast';
 
 const Regist: React.FC = () => {
   const currentStep = useSelector((state: RootState) => state.signup.currentStep);
@@ -42,6 +43,7 @@ const Regist: React.FC = () => {
         <div className="flex-grow flex flex-col justify-center px-6">
             {renderStep()}
         </div>
+        <ToastProvider />
   </div>
   );
 };
