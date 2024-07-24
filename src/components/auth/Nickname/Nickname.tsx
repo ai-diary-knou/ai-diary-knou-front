@@ -6,6 +6,7 @@ import { setNickname, nextStep } from '../../../store/Slice/signupSlice';
 
 import Input from "../../shared/Input";
 import Button from '../../shared/Button';
+import { showToast } from '../../shared/Toast';
 
 import axios from 'axios';
 import { USER_URL_PREFIX } from '../../../mocks/users/handlers';
@@ -55,7 +56,12 @@ const Nickname: React.FC = () => {
             setHelperMessage("올바른 닉네임 형식이 아닙니다.");
             break;
           case "ERROR":
-            // alert("서버와 통신 중 오류가 발생했습니다.");
+            showToast({
+              message: "서버와 통신 중 오류가 발생했습니다.",
+              type: "error",
+              position: "top-center",
+              autoClose: 3000
+            });
             break;
           default:
             setHelperMessage("");
@@ -86,7 +92,12 @@ const Nickname: React.FC = () => {
         dispatch(nextStep());
       } catch (error) {
         console.error(error);
-        // alert("다음 단계로 이동 중 오류가 발생했습니다.");
+        showToast({
+          message: "다음단계로 이동 중 오류가 발생했습니다.",
+          type: "error",
+          position: "top-center",
+          autoClose: 3000
+        });
       } finally {
         setIsLoading(false);
       }

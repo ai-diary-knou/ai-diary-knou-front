@@ -50,7 +50,6 @@ const Email: React.FC = () => {
       console.log(response.data);
     } catch (error) {
       console.error(error);
-      //alert("인증 코드 발송 중 오류가 발생했습니다.");
     }
   };
 
@@ -74,7 +73,12 @@ const Email: React.FC = () => {
         dispatch(nextStep());
       } catch (error) {
         console.error(error);
-        //alert("인증 코드 발송 중 오류가 발생했습니다.");
+        showToast({
+          message: "인증코드 발송 중 에러가 발생했습니다.",
+          type: "error",
+          position: "top-center",
+          autoClose: 3000
+        });
       } finally {
         setIsLoading(false);
       }
@@ -95,15 +99,16 @@ const Email: React.FC = () => {
             setHelperMessage("올바른 이메일 형식이 아닙니다.");
             break;
           case "USER_ALREADY_REGISTERED":
-            showToast({
-              message: "이메일 중복 확인 중 오류가 발생했습니다.",
-              type: "error",
-              position: "bottom-center",
-              autoClose: 3000
-            });
+            setHelperMessage("이미 가입된 이메일입니다.");
             break;
           case "ERROR":
             // alert("서버와 통신 중 오류가 발생했습니다.");
+            showToast({
+              message: "이메일 중복 확인 중 오류가 발생했습니다.",
+              type: "error",
+              position: "top-center",
+              autoClose: 3000
+            });
             break;
           default:
             setHelperMessage("");
