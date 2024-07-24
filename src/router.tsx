@@ -1,7 +1,6 @@
 // router.tsx
 
 import { createBrowserRouter, Navigate } from "react-router-dom";
-import Cookies from "js-cookie";
 
 // 컴포넌트 임포트
 import Onboarding from "./pages/onboarding";
@@ -17,18 +16,36 @@ import DairyDetailPage from "./pages/dairyDetail";
 import axios from "axios";
 import { USER_URL_PREFIX } from "./mocks/users/handlers";
 import React from "react";
+import { AppDispatch } from "./store/store";
+import { useDispatch } from "react-redux";
+import { login } from "./store/Slice/userSlice";
+
+interface TokenResponse {
+  isValid: boolean;
+  user: {
+    email: string;
+    nickname: string;
+  };
+}
 
 // 토큰 확인
-const checkToken = async (): Promise<"valid" | "invalid" | "none"> => {
-  const token = Cookies.get("accessToken");
-  if (!token) return "none";
-
+const checkToken = async (): Promise<TokenResponse> => {
   try {
-    const response = await axios.post(`${USER_URL_PREFIX}/me`, { token });
-    return response.data.status !== "FAIL" ? "valid" : "invalid";
+    const response = await axios.get(`${USER_URL_PREFIX}/me`);
+
+    return {
+      isValid: response.data.status === "SUCCESS",
+      user: response.data.data,
+    };
   } catch (error) {
     console.error("There was an error!", error);
-    return "invalid";
+    return {
+      isValid: false,
+      user: {
+        email: "",
+        nickname: "",
+      },
+    };
   }
 };
 
@@ -37,10 +54,22 @@ const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
   const [tokenStatus, setTokenStatus] = React.useState<
     "valid" | "invalid" | "none"
   >("none");
+  const dispatch = useDispatch<AppDispatch>();
+
+  const [init, setInit] = React.useState(false);
 
   React.useEffect(() => {
-    checkToken().then(setTokenStatus);
-  }, []);
+    checkToken().then(({ isValid, user }) => {
+      setTokenStatus(isValid ? "valid" : "invalid");
+
+      dispatch(login(user));
+      setInit(true);
+    });
+  }, [dispatch]);
+
+  if (!init) {
+    return <div>Loading...</div>;
+  }
 
   // 토큰이 없으면
   if (tokenStatus === "none") {
@@ -62,7 +91,9 @@ const PublicRoute = ({ children }: { children: React.ReactNode }) => {
   >("none");
 
   React.useEffect(() => {
-    checkToken().then(setTokenStatus);
+    checkToken().then(({ isValid }) => {
+      setTokenStatus(isValid ? "valid" : "invalid");
+    });
   }, []);
 
   // 이미 로그인한 경우
@@ -78,6 +109,14 @@ const router = createBrowserRouter([
     path: "/",
     element: <Layout />,
     children: [
+      {
+        path: "/",
+        element: (
+          <ProtectedRoute>
+            <MainPage />,
+          </ProtectedRoute>
+        ),
+      },
       {
         path: "/login",
         element: (
@@ -108,14 +147,6 @@ const router = createBrowserRouter([
           <PublicRoute>
             <ForgotPassword />
           </PublicRoute>
-        ),
-      },
-      {
-        path: "/",
-        element: (
-          <ProtectedRoute>
-            <MainPage />,
-          </ProtectedRoute>
         ),
       },
       {
