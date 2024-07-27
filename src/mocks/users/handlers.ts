@@ -1,6 +1,7 @@
 import { http, HttpResponse } from "msw";
+import { API_URL } from "../../constant/api";
 
-export const USER_URL_PREFIX = "http://server.com/api/v1/users";
+export const USER_URL_PREFIX = `${API_URL}/api/v1/users`;
 
 export const usersHandlers = [
   // 회원가입
@@ -48,6 +49,12 @@ export const usersHandlers = [
       return HttpResponse.json({
         status: "SUCCESS",
         data: null,
+      });
+    } else {
+      return HttpResponse.json({
+        status: "FAIL",
+        code: "INVALID_PARAMETER",
+        message: "Invalid Parameter. email or password mismatch.",
       });
     }
   }),
@@ -167,5 +174,15 @@ export const usersHandlers = [
         data: null,
       });
     }
+  }),
+
+  http.get(USER_URL_PREFIX + "/me", async () => {
+    return HttpResponse.json({
+      status: "SUCCESS",
+      data: {
+        email: "test@test.com",
+        nickname: "test",
+      },
+    });
   }),
 ];

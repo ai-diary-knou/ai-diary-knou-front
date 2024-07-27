@@ -1,6 +1,7 @@
 import { http, HttpResponse } from "msw";
+import { API_URL } from "../../constant/api";
 
-export const DIARY_URL_PREFIX = "http://server.com/api/v1/diaries";
+export const DIARY_URL_PREFIX = `${API_URL}/api/v1/diaries`;
 
 export const diaryHandlers = [
   http.get(DIARY_URL_PREFIX + "/main-reports", () => {
