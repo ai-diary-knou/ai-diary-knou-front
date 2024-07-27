@@ -6,8 +6,11 @@ import Slider from "../components/main/Slider";
 import Typography from "../components/shared/Typography";
 import axios from "axios";
 import { DIARY_URL_PREFIX } from "../mocks/diary/handlers";
+import { useSelector } from "react-redux";
+import { RootState } from "../store/store";
 
 const MainPage = () => {
+  const nickname = useSelector((state: RootState) => state.user.nickname);
   const { data, isLoading } = useQuery({
     queryKey: ["main-reports"],
     queryFn: async () => {
@@ -24,7 +27,7 @@ const MainPage = () => {
   return (
     <div className="px-8 py-[60px]">
       <Typography variant="h5">
-        성장일기님의
+        {nickname}님의
         <br />
         일기를 요약해드려요.
       </Typography>

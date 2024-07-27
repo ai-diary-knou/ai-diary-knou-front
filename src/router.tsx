@@ -68,7 +68,7 @@ const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
   }, [dispatch]);
 
   if (!init) {
-    return <div>Loading...</div>;
+    return <div></div>;
   }
 
   // 토큰이 없으면
@@ -78,7 +78,13 @@ const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
 
   // 토큰이 유효하지 않음
   if (tokenStatus === "invalid") {
-    return <Navigate to="/login" replace />;
+    const isOnboarding = window.localStorage.getItem("isOnboarding");
+
+    return isOnboarding ? (
+      <Navigate to="/login" replace />
+    ) : (
+      <Navigate to="/onboarding" replace />
+    );
   }
 
   return children;
