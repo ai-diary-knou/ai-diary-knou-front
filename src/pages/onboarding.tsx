@@ -62,13 +62,15 @@ const OnboardingPage: React.FC = () => {
   const handleNextClick = () => {
     if (currentSlide < pages.length - 1) {
       sliderRef.current?.slickNext();
-    }else{
+    } else {
+      window.localStorage.setItem('isOnboarding', 'true');
       dispatch(setInitialize());
       navigate('/regist');
     }
   };
 
   const handleLoginClick = () => {
+    window.localStorage.setItem('isOnboarding', 'true');
     navigate('/login');
   };
 
@@ -80,7 +82,10 @@ const OnboardingPage: React.FC = () => {
       <div className="w-full max-w-md mx-auto flex-grow flex flex-col justify-center">
         <Slider {...settings} ref={sliderRef}>
           {pages.map((page, index) => (
-            <div key={index} className="flex flex-col items-center justify-center">
+            <div
+              key={index}
+              className="flex flex-col items-center justify-center"
+            >
               <img
                 src={page.image}
                 alt={page.title}
@@ -95,9 +100,9 @@ const OnboardingPage: React.FC = () => {
           <Button fullWidth onClick={handleNextClick}>
             {pages[currentSlide].buttonText}
           </Button>
-          <Button 
-            fullWidth 
-            onClick={handleLoginClick} 
+          <Button
+            fullWidth
+            onClick={handleLoginClick}
             variant="outlined"
             className={`${currentSlide < 2 ? 'invisible' : 'visible'}`}
           >
