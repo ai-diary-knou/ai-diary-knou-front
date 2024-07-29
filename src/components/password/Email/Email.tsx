@@ -25,27 +25,15 @@ const Email: React.FC = () => {
     // 잦은 API 요청을 방지하기 위한 1차 검증
     if (!value.trim() || !validateEmail(value)) {
       return { isValid: false, code: "INVALID_PARAMETER" };
-    }
-    
-    try {
-      const response = await axios.get(`${USER_URL_PREFIX}/duplicate`, {
-        params: {
-          type: "email",
-          value: value,
-        },
-      });
-      console.log(response.data);
-      return { isValid: response.data.status === 'SUCCESS', code: response.data.code };
-    } catch (error) {
-      console.error(error);
-      return { isValid: false, code: "ERROR" };
+    } else { 
+      return { isValid: true, code: "" };
     }
   };
 
   const sendVerificationCode = async (value: string): Promise<void> => {
     try {
       const response = await axios.post(`${USER_URL_PREFIX}/email/auth-code`, {
-        type: "register",
+        type: "password-modification",
         email: value,
       });
       console.log(response.data);

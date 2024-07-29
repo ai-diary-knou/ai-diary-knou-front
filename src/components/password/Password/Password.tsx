@@ -107,7 +107,7 @@ const Password: React.FC = () => {
     if (isValidPassword && passwordsMatch && password.trim() !== '' && rePassword.trim() !== '') {
       setIsLoading(true);
       try {
-        const response = await axios.post(USER_URL_PREFIX, {
+        const response = await axios.post(`${USER_URL_PREFIX}/password`, {
           email,
           nickname,
           password,

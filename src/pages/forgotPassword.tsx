@@ -2,9 +2,9 @@ import React from 'react';
 import { useSelector } from 'react-redux';
 import { RootState } from '../store/store';
 
-import Email from '../components/auth/Email';
+import Email from '../components/password/Email';
 import Verify from '../components/auth/Verify';
-import Password from '../components/auth/Password';
+import Password from '../components/password/Password';
 import Complete from '../components/auth/Complete';
 
 import AppBar from '../components/shared/AppBar';
