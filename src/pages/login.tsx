@@ -39,14 +39,14 @@ const Login: React.FC = () => {
 
   const login = (): void => {
     axiosInst
-      .post(USER_URL_PREFIX + '/login', {
+      .post('/users/login', {
         email: email,
         password: password,
       })
       .then((response) => {
         console.log(response.status);
         console.log(response.data);
-        if (response.data.code !== 'SUCCESS') {
+        if (response.data.status !== 'SUCCESS') {
           switch (response.data.code) {
             case 'USER_LOGIN_FAIL':
               setHelperText(
@@ -66,7 +66,8 @@ const Login: React.FC = () => {
         } else {
           setHelperText('');
           // 로그인 성공 처리
-          navigate('/home');
+          localStorage.setItem("Authorization", response.data.data);
+          navigate('/');
         }
       })
       .catch((error) => {
