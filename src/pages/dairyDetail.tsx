@@ -18,8 +18,6 @@ const DairyDetailPage = () => {
     enabled: dairyId !== undefined,
   });
 
-  console.log(data);
-
   if (isLoading) {
     return (
       <div className="w-full h-full flex justify-center items-center">
