@@ -13,12 +13,11 @@ import CalendarPage from "./pages/calendar";
 import DairyEditPage from "./pages/dairyEdit";
 import DairyDetailPage from "./pages/dairyDetail";
 
-import axios from "axios";
-import { USER_URL_PREFIX } from "./mocks/users/handlers";
 import React from "react";
 import { AppDispatch } from "./store/store";
 import { useDispatch } from "react-redux";
 import { login } from "./store/Slice/userSlice";
+import axiosInst from "./util/axiosInst";
 
 interface TokenResponse {
   isValid: boolean;
@@ -31,7 +30,7 @@ interface TokenResponse {
 // 토큰 확인
 const checkToken = async (): Promise<TokenResponse> => {
   try {
-    const response = await axios.get(`${USER_URL_PREFIX}/me`);
+    const response = await axiosInst.get(`$/users/me`);
 
     return {
       isValid: response.data.status === "SUCCESS",
