@@ -65,7 +65,7 @@ const Login: React.FC = () => {
         } else {
           setHelperText("");
           // 로그인 성공 처리
-          localStorage.setItem("token", response.data.data);
+          localStorage.setItem("Authorization", response.data.data);
           navigate("/");
         }
       })
