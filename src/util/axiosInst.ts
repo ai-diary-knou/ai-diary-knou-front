@@ -1,0 +1,17 @@
+import axios from "axios";
+import { API_URL } from "../constant/api";
+
+const axiosInst = axios.create({
+  baseURL: `${API_URL}/api/v1`,
+});
+
+axiosInst.interceptors.request.use((config) => {
+  const token = window.localStorage.getItem("token");
+  if (token && token !== "null") {
+    config.headers.Authorization = `Bearer ${token}`;
+  }
+
+  return config;
+}, null);
+
+export default axiosInst;
