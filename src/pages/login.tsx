@@ -6,13 +6,12 @@ import AppBar from '../components/shared/AppBar';
 import Title from '../components/shared/Title';
 import { showToast } from '../components/shared/Toast';
 
-import axios from 'axios';
-
 import { USER_URL_PREFIX } from '../mocks/users/handlers';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { AppDispatch } from '../store/store';
 import { setInitialize } from '../store/Slice/signupSlice';
+import axiosInst from '../util/axiosInst';
 
 const Login: React.FC = () => {
   const navigate = useNavigate();
@@ -39,7 +38,7 @@ const Login: React.FC = () => {
   };
 
   const login = (): void => {
-    axios
+    axiosInst
       .post(USER_URL_PREFIX + '/login', {
         email: email,
         password: password,
