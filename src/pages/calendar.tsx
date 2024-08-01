@@ -17,8 +17,8 @@ const CalendarPage = () => {
       const response = await axios.get(DIARY_URL_PREFIX + "/monthly-reports", {
         params: {
           year: selectedMonth.year(),
-          month: selectedMonth.month() + 1,
-          date: selectedMonth.date(),
+          month: ("00"+(selectedMonth.month()+1).toString()).slice(-2),
+          date: ("00"+(selectedDate.date().toString())).slice(-2),
         },
       });
 
