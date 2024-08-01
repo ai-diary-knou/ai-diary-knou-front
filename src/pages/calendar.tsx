@@ -4,8 +4,8 @@ import DayCard from "../components/calendar/DayCard";
 import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import dayjs, { Dayjs } from "dayjs";
-import axios from "axios";
 import { DIARY_URL_PREFIX } from "../mocks/diary/handlers";
+import axiosInst from "../util/axiosInst";
 
 const CalendarPage = () => {
   const [selectedDate, setSelectedDate] = useState<Dayjs>(dayjs());
@@ -14,7 +14,7 @@ const CalendarPage = () => {
   const { data } = useQuery({
     queryKey: ["monthly-reports", selectedMonth.format("YYYY-MM-DD")],
     queryFn: async () => {
-      const response = await axios.get(DIARY_URL_PREFIX + "/monthly-reports", {
+      const response = await axiosInst.get(DIARY_URL_PREFIX + "/monthly-reports", {
         params: {
           year: selectedMonth.year(),
           month: ("00"+(selectedMonth.month()+1).toString()).slice(-2),

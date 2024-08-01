@@ -4,17 +4,17 @@ import KeywordList from "../components/main/Keyword";
 import RecommendList from "../components/main/Recommend";
 import Slider from "../components/main/Slider";
 import Typography from "../components/shared/Typography";
-import axios from "axios";
 import { DIARY_URL_PREFIX } from "../mocks/diary/handlers";
 import { useSelector } from "react-redux";
 import { RootState } from "../store/store";
+import axiosInst from "../util/axiosInst";
 
 const MainPage = () => {
   const nickname = useSelector((state: RootState) => state.user.nickname);
   const { data, isLoading } = useQuery({
     queryKey: ["main-reports"],
     queryFn: async () => {
-      const response = await axios.get(DIARY_URL_PREFIX + "/main-reports");
+      const response = await axiosInst.get(DIARY_URL_PREFIX + "/main-reports");
 
       return response.data.data;
     },
