@@ -3,7 +3,6 @@ import "slick-carousel/slick/slick-theme.css";
 import "./slider.css";
 
 import ReactSlider from "react-slick";
-import Typography from "../../shared/Typography";
 
 interface SliderProps {
   items: string[];
