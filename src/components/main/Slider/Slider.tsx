@@ -12,9 +12,8 @@ interface SliderProps {
 const Slider = ({ items }: SliderProps) => {
   const settings = {
     dots: true,
-    infinite: true,
     speed: 500,
-    autoplay: true,
+    autoplay: false,
     autoplaySpeed: 4000,
     vertical: true,
     verticalSwiping: true,
@@ -27,9 +26,9 @@ const Slider = ({ items }: SliderProps) => {
   return (
     <ReactSlider {...settings}>
       {items.map((item, index) => (
-        <div key={index}>
-          <Typography variant="body1">{item}</Typography>
-        </div>
+        <p className="flex items-center text-center h-[120px]" key={index}>
+          {item}
+        </p>
       ))}
     </ReactSlider>
   );
