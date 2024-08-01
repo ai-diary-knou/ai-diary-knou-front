@@ -158,7 +158,7 @@ const router = createBrowserRouter([
         path: "/calendar",
         element: (
           <ProtectedRoute>
-            <CalendarPage />,
+            <CalendarPage />
           </ProtectedRoute>
         ),
       },
@@ -166,7 +166,7 @@ const router = createBrowserRouter([
         path: "/edit",
         element: (
           <ProtectedRoute>
-            <DairyEditPage />,
+            <DairyEditPage />
           </ProtectedRoute>
         ),
       },
@@ -174,7 +174,7 @@ const router = createBrowserRouter([
         path: "/dairy/:dairyId",
         element: (
           <ProtectedRoute>
-            <DairyDetailPage />,
+            <DairyDetailPage />
           </ProtectedRoute>
         ),
       },
@@ -186,7 +186,7 @@ const router = createBrowserRouter([
         path: "/account",
         element: (
           <ProtectedRoute>
-            <div>Account</div>,
+            <div>Account</div>
           </ProtectedRoute>
         ),
       },

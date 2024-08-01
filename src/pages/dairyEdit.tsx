@@ -2,10 +2,11 @@ import { Typography } from "@mui/material";
 import { useEffect, useMemo, useState } from "react";
 import Button from "../components/shared/Button";
 import { useLocation, useNavigate } from "react-router-dom";
-import { useQuery } from "@tanstack/react-query";
-import { DIARY_URL_PREFIX } from "../mocks/diary/handlers";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import dayjs from "dayjs";
 import axiosInst from "../util/axiosInst";
+import { showToast } from "../components/shared/Toast";
+import Loader from "../components/diaryEdit/Loader";
 
 const DairyEditPage = () => {
   const location = useLocation();
@@ -13,14 +14,51 @@ const DairyEditPage = () => {
 
   const dairyId = location.search.split("=")[1];
 
+  const [isSaveLoading, setIsSaveLoading] = useState(false);
+
   const { data } = useQuery({
     queryKey: ["dairy-detail", dairyId],
     queryFn: async () => {
-      const response = await axiosInst.get(DIARY_URL_PREFIX + `/${dairyId}`);
+      const response = await axiosInst.get(`/diaries/${dairyId}`);
 
       return response.data.data;
     },
     enabled: dairyId !== undefined,
+  });
+
+  const mutation = useMutation({
+    mutationFn: async () => {
+      setIsSaveLoading(true);
+
+      let id = dairyId;
+
+      if (dairyId) {
+        const res = await axiosInst.put(`/diaries/${dairyId}`, {
+          content: value,
+        });
+
+        id = res.data.data.diaryId;
+
+        navigate(`/dairy/${id}`);
+      } else {
+        const res = await axiosInst.post("/diaries", {
+          entryDate: dayjs().format("YYYY-MM-DD"),
+          content: value,
+        });
+
+        id = res.data.data.diaryId;
+
+        navigate(`/dairy/${id}`);
+      }
+    },
+    onError: () => {
+      showToast({
+        message: "일기 저장에 실패했습니다.",
+        type: "error",
+        position: "top-center",
+        autoClose: 3000,
+      });
+    },
   });
 
   const [value, setValue] = useState("");
@@ -35,15 +73,17 @@ const DairyEditPage = () => {
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    // Juwon added this line
-    navigate(`/dairy/${dairyId}`);
-    console.log(value);
+    mutation.mutate();
   };
 
   const today = useMemo(
     () => (data?.entryDate ? dayjs(data.entryDate.split(" ")[0]) : dayjs()),
     [data]
   );
+
+  if (isSaveLoading) {
+    return <Loader />;
+  }
 
   return (
     <form onSubmit={handleSubmit} className="mx-8 my-[60px]">
@@ -67,7 +107,7 @@ const DairyEditPage = () => {
           ></textarea>
         </div>
         <Button type="submit" fullWidth>
-          저장
+          {dairyId ? "수정" : "저장"}
         </Button>
       </div>
     </form>
