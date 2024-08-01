@@ -30,7 +30,7 @@ interface TokenResponse {
 // 토큰 확인
 const checkToken = async (): Promise<TokenResponse> => {
   try {
-    const response = await axiosInst.get(`$/users/me`);
+    const response = await axiosInst.get(`/users/me`);
 
     return {
       isValid: response.data.status === "SUCCESS",

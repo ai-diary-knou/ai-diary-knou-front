@@ -6,7 +6,7 @@ const axiosInst = axios.create({
 });
 
 axiosInst.interceptors.request.use((config) => {
-  const token = window.localStorage.getItem("token");
+  const token = window.localStorage.getItem("Authorization");
   if (token && token !== "null") {
     config.headers.Authorization = `${token}`;
   }
