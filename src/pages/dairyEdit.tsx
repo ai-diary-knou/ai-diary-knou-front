@@ -1,21 +1,22 @@
 import { Typography } from "@mui/material";
 import { useEffect, useMemo, useState } from "react";
 import Button from "../components/shared/Button";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
-import axios from "axios";
 import { DIARY_URL_PREFIX } from "../mocks/diary/handlers";
 import dayjs from "dayjs";
+import axiosInst from "../util/axiosInst";
 
 const DairyEditPage = () => {
   const location = useLocation();
+  const navigate = useNavigate();
 
   const dairyId = location.search.split("=")[1];
 
   const { data } = useQuery({
     queryKey: ["dairy-detail", dairyId],
     queryFn: async () => {
-      const response = await axios.get(DIARY_URL_PREFIX + `/${dairyId}`);
+      const response = await axiosInst.get(DIARY_URL_PREFIX + `/${dairyId}`);
 
       return response.data.data;
     },
@@ -34,6 +35,8 @@ const DairyEditPage = () => {
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    // Juwon added this line
+    navigate(`/dairy/${dairyId}`);
     console.log(value);
   };
 
