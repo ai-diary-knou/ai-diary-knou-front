@@ -10,7 +10,17 @@ import { showToast } from '../../shared/Toast';
 
 import axios from 'axios';
 import { USER_URL_PREFIX } from '../../../mocks/users/handlers';
-const Nickname: React.FC = () => {
+import axiosInst from '../../../util/axiosInst';
+import { useNavigate } from 'react-router-dom';
+
+interface NickNameProps {
+  isLogin: boolean;
+}
+
+const Nickname: React.FC<NickNameProps> = ({isLogin}) => {
+
+  const navigate = useNavigate();
+  
   const dispatch = useDispatch<AppDispatch>();
   const nickname = useSelector((state: RootState) => state.signup.nickname);
   const [isValidNickname, setIsValidNickname] = useState(true);
@@ -40,6 +50,22 @@ const Nickname: React.FC = () => {
     } catch (error) {
       console.error(error);
       return { isValid: false, code: "ERROR" };
+    }
+  };
+
+  const changeNickname = async (value: string): Promise<{ isValid: boolean }> => {
+    try {
+      const response = await axiosInst.get(`${USER_URL_PREFIX}/nickname`, {
+        params: {
+          type: "nickname",
+          value: value,
+        },
+      });
+      console.log(response.data);
+      return { isValid: response.data.status === 'SUCCESS'};
+    } catch (error) {
+      console.error(error);
+      return { isValid: false };
     }
   };
 
@@ -86,7 +112,15 @@ const Nickname: React.FC = () => {
   };
 
   const handleNextStep = async (): Promise<void> => {
-    if (isValidNickname && nickname.trim() !== '') {
+    console.log(nickname);
+    // 로그인 후 닉네임 변경
+    if(isLogin){
+      // 닉네임 변경 성공
+      if(await changeNickname(nickname)){
+        navigate('/account');
+      }
+    } 
+    else if (isValidNickname && nickname.trim() !== '') {
       setIsLoading(true);
       try {
         dispatch(nextStep());

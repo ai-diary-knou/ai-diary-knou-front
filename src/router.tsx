@@ -18,6 +18,9 @@ import { AppDispatch } from "./store/store";
 import { useDispatch } from "react-redux";
 import { login } from "./store/Slice/userSlice";
 import axiosInst from "./util/axiosInst";
+import Account from "./pages/account";
+import ChangePassword from "./pages/changePassword";
+import Profile from "./pages/profile";
 
 interface TokenResponse {
   isValid: boolean;
@@ -186,9 +189,27 @@ const router = createBrowserRouter([
         path: "/account",
         element: (
           <ProtectedRoute>
-            <div>Account</div>
+            <Account />
           </ProtectedRoute>
         ),
+      },
+      {
+        path: "/changePassword",
+        element: (
+          <ProtectedRoute>
+            <ChangePassword />
+          </ProtectedRoute>
+        ),
+
+      },
+      {
+        path: "/profile",
+        element: (
+          <ProtectedRoute>
+            <Profile />
+          </ProtectedRoute>
+        ),
+
       },
     ],
   },

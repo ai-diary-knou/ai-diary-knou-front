@@ -2,10 +2,7 @@ import React from "react";
 import { useSelector } from "react-redux";
 import { RootState } from "../store/store";
 
-import Email from "../components/auth/Email";
-import Verify from "../components/auth/Verify";
-import Nickname from "../components/auth/Nickname";
-import Password from "../components/auth/Password";
+import Password from "../components/password/Password";
 import Complete from "../components/auth/Complete";
 
 import AppBar from "../components/shared/AppBar";
@@ -17,20 +14,14 @@ const Regist: React.FC = () => {
   );
 
   const completeProps = {
-    text: "성장일기님 회원 가입을 축하드립니다!!",
+    text: "다음 로그인부터 변경된 비밀번호를 사용해주세요.",
   };
 
   const renderStep = () => {
     switch (currentStep) {
       case 1:
-        return <Email />;
-      case 2:
-        return <Verify />;
-      case 3:
-        return <Nickname isLogin={false}/>;
-      case 4:
         return <Password />;
-      case 5:
+      case 2:
         return <Complete {...completeProps} />;
       default:
         return null;
@@ -40,7 +31,7 @@ const Regist: React.FC = () => {
   return (
     <div className="mx-auto bg-white flex flex-col h-screen">
       <AppBar />
-      <Title title="회원가입" />
+      <Title title="비밀번호 변경" />
       <div className="flex-grow flex flex-col justify-center px-6">
         {renderStep()}
       </div>

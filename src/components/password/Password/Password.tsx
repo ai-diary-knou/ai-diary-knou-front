@@ -25,7 +25,7 @@ const Password: React.FC = () => {
   const [isCheckingPassword, setIsCheckingPassword] = useState(false);
 
   const validatePassword = (password: string): boolean => {
-    const re = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,16}$/;
+    const re = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&#]{8,16}$/;
     return re.test(password);
   };
 
@@ -36,20 +36,8 @@ const Password: React.FC = () => {
     if (value !== reValue) {
       return { isValid: false, code: "PASSWORD_MISMATCH" };
     }
-
-    try {
-      const response = await axios.post(`${USER_URL_PREFIX}/login`, { 
-        email : email,
-        nickname : nickname,
-        password: value ,
-        rePassword : rePassword,
-      });
-      console.log(response.data);
-      return { isValid: response.data.status === 'SUCCESS', code: response.data.code };
-    } catch (error) {
-      console.error('Error validating password:', error);
-      return { isValid: false, code: "ERROR" };
-    }
+    
+    return { isValid: true, code: "SUCCESS" };
   };
 
   useEffect(() => {
