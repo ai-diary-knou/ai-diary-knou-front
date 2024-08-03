@@ -6,7 +6,6 @@ import { setPassword, setRePassword, nextStep } from '../../../store/Slice/signu
 
 import Input from "../../shared/Input";
 import Button from '../../shared/Button';
-import { showToast } from '../../shared/Toast';
 
 import axios from 'axios';
 import { USER_URL_PREFIX } from '../../../mocks/users/handlers';
@@ -28,61 +27,26 @@ const Password: React.FC = () => {
     return re.test(password);
   };
 
-  const checkPassword = async (value: string, reValue: string): Promise<{ isValid: boolean; code: string }> => {
-    if (!value.trim() || !validatePassword(value)) {
-      return { isValid: false, code: "INVALID_PARAMETER" };
-    }
-    if (value !== reValue) {
-      return { isValid: false, code: "PASSWORD_MISMATCH" };
-    }
-
-    try {
-      const response = await axios.post(`${USER_URL_PREFIX}/login`, { 
-        email : email,
-        nickname : nickname,
-        password: value ,
-        rePassword : rePassword,
-      });
-      console.log(response.data);
-      return { isValid: response.data.status === 'SUCCESS', code: response.data.code };
-    } catch (error) {
-      console.error('Error validating password:', error);
-      return { isValid: false, code: "ERROR" };
-    }
-  };
-
   useEffect(() => {
     const validatePasswordInput = async () => {
       if (password.trim() !== '') {
         setIsCheckingPassword(true);
-
-        const { isValid, code } = await checkPassword(password, rePassword);
+  
+        // 비밀번호 형식만 확인
+        const isValid = validatePassword(password);
         setIsValidPassword(isValid);
-        setPasswordsMatch(password === rePassword);
-
-        switch (code) {
-          case "USER_ALREADY_REGISTERED":
-            setHelperMessage("가입된 계정입니다.");
-            break;
-          case "INVALID_PARAMETER":
-            setHelperMessage("유효하지 않는 비밀번호입니다.");
-            break;
-          case "SUCCESS":
-            setHelperMessage("");
-            break;
-          case "ERROR":
-            showToast({
-              message: "비밀번호 검증 중 오류가 발생했습니다.",
-              type: "error",
-              position: "top-center",
-              autoClose: 3000
-            });
-            break;
-          default:
-            setHelperMessage("");
-            break;
+  
+        if (!isValid) {
+          setHelperMessage("유효하지 않은 비밀번호입니다.");
+        } else {
+          setHelperMessage("");
         }
-        
+  
+        // 비밀번호 일치 여부 확인 (두 번째 입력창에 값이 있을 때만)
+        if (rePassword.trim() !== '') {
+          setPasswordsMatch(password === rePassword);
+        }
+  
         setIsCheckingPassword(false);
       } else {
         setIsValidPassword(true);
@@ -90,7 +54,7 @@ const Password: React.FC = () => {
         setHelperMessage("");
       }
     };
-
+  
     validatePasswordInput();
   }, [password, rePassword]);
 
@@ -105,6 +69,8 @@ const Password: React.FC = () => {
   const handleNextStep = async (): Promise<void> => {
     if (isValidPassword && passwordsMatch && password.trim() !== '' && rePassword.trim() !== '') {
       setIsLoading(true);
+      console.log(email);
+      console.log(nickname);
       try {
         const response = await axios.post(USER_URL_PREFIX, {
           email,
